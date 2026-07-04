@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PlanesPage from './pages/PlanesPage.jsx';
 
 const styles = {
   mobileContainer: {
@@ -11,6 +12,7 @@ const styles = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     color: '#1a1a1a',
   },
+  
   loginScreen: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,6 +69,14 @@ const styles = {
     cursor: 'pointer',
     marginTop: '20px',
   },
+
+  appContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  
   header: {
     background: 'white',
     borderBottom: '1px solid #e0e0e0',
@@ -88,12 +98,14 @@ const styles = {
     fontSize: '12px',
     cursor: 'pointer',
   },
+
   content: {
     flex: 1,
     overflowY: 'auto',
     padding: '16px',
     paddingBottom: '80px',
   },
+
   metricsGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
@@ -116,6 +128,7 @@ const styles = {
     fontSize: '12px',
     color: '#666',
   },
+
   card: {
     background: 'white',
     border: '1px solid #e0e0e0',
@@ -123,18 +136,7 @@ const styles = {
     padding: '16px',
     marginBottom: '12px',
   },
-  scanButton: {
-    width: '100%',
-    padding: '12px',
-    background: '#6C3FE0',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginBottom: '8px',
-  },
+
   qrContainer: {
     background: 'white',
     borderRadius: '12px',
@@ -153,6 +155,42 @@ const styles = {
     justifyContent: 'center',
     fontSize: '48px',
   },
+  scanButton: {
+    width: '100%',
+    padding: '12px',
+    background: '#6C3FE0',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginBottom: '8px',
+  },
+  generateQRButton: {
+    width: '100%',
+    padding: '12px',
+    background: '#0F6E56',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  upgradeButton: {
+    width: '100%',
+    padding: '12px',
+    background: '#F5A623',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '8px',
+  },
+
   offerItem: {
     background: 'white',
     border: '1px solid #e0e0e0',
@@ -179,6 +217,7 @@ const styles = {
     fontSize: '11px',
     fontWeight: '600',
   },
+
   customerItem: {
     background: 'white',
     border: '1px solid #e0e0e0',
@@ -211,6 +250,11 @@ const styles = {
     background: '#E8E8E8',
     color: '#666',
   },
+  levelGold: {
+    background: '#FFF8E6',
+    color: '#F5A623',
+  },
+
   reminderItem: {
     background: '#ede8fc',
     border: '1px solid #6C3FE0',
@@ -240,6 +284,7 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
   },
+
   bottomNav: {
     position: 'fixed',
     bottom: 0,
@@ -283,6 +328,7 @@ export default function VuelveTiendaApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [qrGenerated, setQrGenerated] = useState(null);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [showPlanes, setShowPlanes] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -303,6 +349,7 @@ export default function VuelveTiendaApp() {
     setPassword('');
   };
 
+  // Mock data
   const metrics = {
     transacciones: 1243,
     clientes: 342,
@@ -371,8 +418,14 @@ export default function VuelveTiendaApp() {
     );
   }
 
+  // Si showPlanes es true, mostrar la página de planes
+  if (showPlanes) {
+    return <PlanesPage onBack={() => setShowPlanes(false)} />;
+  }
+
   return (
     <div style={styles.mobileContainer}>
+      {/* Header */}
       <div style={styles.header}>
         <h1 style={styles.headerTitle}>Vuelve Tienda</h1>
         <button style={styles.logoutBtnSmall} onClick={handleLogout}>
@@ -380,10 +433,15 @@ export default function VuelveTiendaApp() {
         </button>
       </div>
 
+      {/* Content */}
       <div style={styles.content}>
+        {/* DASHBOARD */}
         {activeTab === 'dashboard' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>📊 Resumen del Día</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              📊 Resumen del Día
+            </h2>
+
             <div style={styles.metricsGrid}>
               <div style={styles.metricSmall}>
                 <div style={styles.metricValue}>{metrics.transacciones}</div>
@@ -402,45 +460,83 @@ export default function VuelveTiendaApp() {
                 <div style={styles.metricLabel}>Promedio</div>
               </div>
             </div>
+
             <div style={styles.card}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>⚡ Acciones Rápidas</h3>
-              <button style={{ ...styles.scanButton, marginBottom: '8px' }}>📱 Validar Compra</button>
-              <button style={{...styles.scanButton, background: '#0F6E56'}} onClick={handleGenerateQR}>🎁 Crear Oferta</button>
+              <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+                ⚡ Acciones Rápidas
+              </h3>
+              <button style={{ ...styles.scanButton, marginBottom: '8px' }}>
+                📱 Validar Compra
+              </button>
+              <button style={styles.generateQRButton} onClick={handleGenerateQR}>
+                🎁 Crear Oferta
+              </button>
+              <button style={styles.upgradeButton} onClick={() => setShowPlanes(true)}>
+                🚀 Mejorar Plan
+              </button>
             </div>
           </>
         )}
 
+        {/* SCANNER QR */}
         {activeTab === 'scanner' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>📸 Escanear QR</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              📸 Escanear QR
+            </h2>
+
             {showQRModal ? (
               <div style={styles.qrContainer}>
                 <h3 style={{ margin: '0 0 12px 0' }}>QR Generado</h3>
                 <div style={styles.qrPlaceholder}>📦</div>
-                <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>Código: {qrGenerated}</p>
-                <button style={{...styles.scanButton, background: '#0F6E56'}} onClick={() => setShowQRModal(false)}>Cerrar</button>
+                <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
+                  Código: {qrGenerated}
+                </p>
+                <button
+                  style={{
+                    ...styles.scanButton,
+                    background: '#0F6E56',
+                  }}
+                  onClick={() => setShowQRModal(false)}
+                >
+                  Cerrar
+                </button>
               </div>
             ) : (
               <>
                 <div style={styles.qrContainer}>
                   <div style={styles.qrPlaceholder}>📷</div>
-                  <p style={{ fontSize: '12px', color: '#666', marginBottom: '16px' }}>Apunta la cámara al QR del cliente</p>
+                  <p style={{ fontSize: '12px', color: '#666', marginBottom: '16px' }}>
+                    Apunta la cámara al QR del cliente
+                  </p>
                   <button style={styles.scanButton}>Activar Cámara</button>
                 </div>
+
                 <div style={styles.card}>
-                  <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>Última Validación</h3>
-                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>Cliente: Juan Pérez</p>
-                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>Monto: $8.500</p>
-                  <p style={{ fontSize: '12px', color: '#0F6E56', fontWeight: '600' }}>✅ 85 puntos otorgados</p>
+                  <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+                    Última Validación
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>
+                    Cliente: Juan Pérez
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>
+                    Monto: $8.500
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#0F6E56', fontWeight: '600' }}>
+                    ✅ 85 puntos otorgados
+                  </p>
                 </div>
               </>
             )}
           </>
         )}
 
+        {/* OFERTAS */}
         {activeTab === 'ofertas' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>🎁 Mis Ofertas</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              🎁 Mis Ofertas
+            </h2>
             {offers.map((offer) => (
               <div key={offer.id} style={styles.offerItem}>
                 <h3 style={styles.offerTitle}>{offer.titulo}</h3>
@@ -451,14 +547,26 @@ export default function VuelveTiendaApp() {
           </>
         )}
 
+        {/* CLIENTES */}
         {activeTab === 'clientes' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>👥 Mis Clientes ({customers.length})</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              👥 Mis Clientes ({customers.length})
+            </h2>
             {customers.map((customer) => (
               <div key={customer.id} style={styles.customerItem}>
                 <h3 style={styles.customerName}>{customer.name}</h3>
-                <p style={styles.customerInfo}>{customer.compras} compras • {customer.puntos} puntos</p>
-                <span style={{ ...styles.levelBadge, ...(customer.nivel === 'bronze' ? styles.levelBronze : styles.levelSilver) }}>
+                <p style={styles.customerInfo}>
+                  {customer.compras} compras • {customer.puntos} puntos
+                </p>
+                <span
+                  style={{
+                    ...styles.levelBadge,
+                    ...(customer.nivel === 'bronze'
+                      ? styles.levelBronze
+                      : styles.levelSilver),
+                  }}
+                >
                   {customer.nivel.toUpperCase()}
                 </span>
               </div>
@@ -466,40 +574,84 @@ export default function VuelveTiendaApp() {
           </>
         )}
 
+        {/* RECORDATORIOS */}
         {activeTab === 'recordatorios' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>🔔 Recordatorios Inteligentes</h2>
-            <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>Vuelve analiza a tus clientes y te sugiere cuándo contactarlos</p>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              🔔 Recordatorios Inteligentes
+            </h2>
+            <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
+              Vuelve analiza a tus clientes y te sugiere cuándo contactarlos
+            </p>
             {reminders.map((reminder) => (
               <div key={reminder.id} style={styles.reminderItem}>
                 <h3 style={styles.reminderTitle}>{reminder.customer}</h3>
                 <p style={styles.reminderText}>{reminder.action}</p>
-                <p style={{ fontSize: '12px', color: '#6C3FE0', marginBottom: '8px', fontWeight: '600' }}>💡 {reminder.message}</p>
-                <button style={styles.sendButton}>Enviar Notificación</button>
+                <p style={{ fontSize: '12px', color: '#6C3FE0', marginBottom: '8px', fontWeight: '600' }}>
+                  💡 {reminder.message}
+                </p>
+                <button style={styles.sendButton}>
+                  Enviar Notificación
+                </button>
               </div>
             ))}
           </>
         )}
       </div>
 
+      {/* Bottom Navigation */}
       <div style={styles.bottomNav}>
-        <button style={{ ...styles.navItem, ...(activeTab === 'dashboard' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('dashboard')}>
+        <button
+          style={{
+            ...styles.navItem,
+            ...(activeTab === 'dashboard' ? styles.navItemActive : {}),
+          }}
+          onClick={() => setActiveTab('dashboard')}
+        >
           <div style={styles.navIcon}>📊</div>
           <span>Dashboard</span>
         </button>
-        <button style={{ ...styles.navItem, ...(activeTab === 'scanner' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('scanner')}>
+
+        <button
+          style={{
+            ...styles.navItem,
+            ...(activeTab === 'scanner' ? styles.navItemActive : {}),
+          }}
+          onClick={() => setActiveTab('scanner')}
+        >
           <div style={styles.navIcon}>📸</div>
           <span>Scanner</span>
         </button>
-        <button style={{ ...styles.navItem, ...(activeTab === 'ofertas' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('ofertas')}>
+
+        <button
+          style={{
+            ...styles.navItem,
+            ...(activeTab === 'ofertas' ? styles.navItemActive : {}),
+          }}
+          onClick={() => setActiveTab('ofertas')}
+        >
           <div style={styles.navIcon}>🎁</div>
           <span>Ofertas</span>
         </button>
-        <button style={{ ...styles.navItem, ...(activeTab === 'clientes' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('clientes')}>
+
+        <button
+          style={{
+            ...styles.navItem,
+            ...(activeTab === 'clientes' ? styles.navItemActive : {}),
+          }}
+          onClick={() => setActiveTab('clientes')}
+        >
           <div style={styles.navIcon}>👥</div>
           <span>Clientes</span>
         </button>
-        <button style={{ ...styles.navItem, ...(activeTab === 'recordatorios' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('recordatorios')}>
+
+        <button
+          style={{
+            ...styles.navItem,
+            ...(activeTab === 'recordatorios' ? styles.navItemActive : {}),
+          }}
+          onClick={() => setActiveTab('recordatorios')}
+        >
           <div style={styles.navIcon}>🔔</div>
           <span>Recordatorios</span>
         </button>
