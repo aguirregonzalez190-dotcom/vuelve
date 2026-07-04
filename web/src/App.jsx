@@ -38,14 +38,13 @@ const styles = {
     marginBottom: '40px',
     textAlign: 'center',
   },
-  inputGroup: {
+  formGroup: {
     marginBottom: '16px',
     width: '100%',
   },
-  inputLabel: {
+  label: {
     fontSize: '12px',
     fontWeight: '600',
-    color: '#1a1a1a',
     marginBottom: '6px',
     display: 'block',
   },
@@ -57,7 +56,7 @@ const styles = {
     fontSize: '14px',
     boxSizing: 'border-box',
   },
-  loginButton: {
+  button: {
     width: '100%',
     padding: '12px',
     background: '#6C3FE0',
@@ -69,14 +68,18 @@ const styles = {
     cursor: 'pointer',
     marginTop: '20px',
   },
-
-  appContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
+  toggleText: {
+    marginTop: '20px',
+    fontSize: '12px',
+    color: '#666',
+    textAlign: 'center',
   },
-  
+  toggleLink: {
+    color: '#6C3FE0',
+    cursor: 'pointer',
+    fontWeight: '600',
+  },
+
   header: {
     background: 'white',
     borderBottom: '1px solid #e0e0e0',
@@ -90,7 +93,7 @@ const styles = {
     fontWeight: '700',
     color: '#6C3FE0',
   },
-  logoutBtnSmall: {
+  profileBtn: {
     background: 'transparent',
     border: '1px solid #e0e0e0',
     padding: '6px 12px',
@@ -106,27 +109,43 @@ const styles = {
     paddingBottom: '80px',
   },
 
-  metricsGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '12px',
+  pointsCard: {
+    background: 'linear-gradient(135deg, #6C3FE0 0%, #4a2c8f 100%)',
+    color: 'white',
+    borderRadius: '16px',
+    padding: '24px',
     marginBottom: '16px',
+    textAlign: 'center',
   },
-  metricSmall: {
-    background: 'white',
-    border: '1px solid #e0e0e0',
-    borderRadius: '12px',
-    padding: '16px',
-  },
-  metricValue: {
-    fontSize: '24px',
+  pointsValue: {
+    fontSize: '48px',
     fontWeight: '700',
-    color: '#6C3FE0',
-    marginBottom: '4px',
+    marginBottom: '8px',
   },
-  metricLabel: {
+  pointsLabel: {
+    fontSize: '14px',
+    opacity: 0.9,
+    marginBottom: '12px',
+  },
+  levelBadge: {
+    display: 'inline-block',
+    padding: '6px 12px',
+    background: 'rgba(255,255,255,0.2)',
+    borderRadius: '20px',
     fontSize: '12px',
-    color: '#666',
+    fontWeight: '600',
+  },
+  levelProgress: {
+    marginTop: '16px',
+    background: 'rgba(255,255,255,0.2)',
+    height: '8px',
+    borderRadius: '4px',
+    overflow: 'hidden',
+  },
+  levelProgressBar: {
+    height: '100%',
+    background: 'white',
+    borderRadius: '4px',
   },
 
   card: {
@@ -137,78 +156,29 @@ const styles = {
     marginBottom: '12px',
   },
 
-  qrContainer: {
-    background: 'white',
-    borderRadius: '12px',
-    padding: '24px',
-    textAlign: 'center',
-    marginBottom: '16px',
-  },
-  qrPlaceholder: {
-    width: '200px',
-    height: '200px',
-    background: '#f0f0f0',
-    borderRadius: '12px',
-    margin: '0 auto 16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '48px',
-  },
-  scanButton: {
-    width: '100%',
-    padding: '12px',
-    background: '#6C3FE0',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginBottom: '8px',
-  },
-  generateQRButton: {
-    width: '100%',
-    padding: '12px',
-    background: '#0F6E56',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  },
-  upgradeButton: {
-    width: '100%',
-    padding: '12px',
-    background: '#F5A623',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginTop: '8px',
-  },
-
-  offerItem: {
+  storeCard: {
     background: 'white',
     border: '1px solid #e0e0e0',
     borderRadius: '12px',
     padding: '16px',
     marginBottom: '12px',
   },
-  offerTitle: {
-    fontSize: '15px',
-    fontWeight: '600',
-    marginBottom: '4px',
+  storeHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'start',
+    marginBottom: '8px',
   },
-  offerDesc: {
+  storeName: {
+    fontSize: '16px',
+    fontWeight: '600',
+  },
+  storeCategory: {
     fontSize: '12px',
     color: '#666',
     marginBottom: '8px',
   },
-  badge: {
+  offerBadge: {
     display: 'inline-block',
     padding: '4px 8px',
     background: '#E1F5EE',
@@ -218,71 +188,92 @@ const styles = {
     fontWeight: '600',
   },
 
-  customerItem: {
-    background: 'white',
-    border: '1px solid #e0e0e0',
-    borderRadius: '12px',
-    padding: '12px',
-    marginBottom: '8px',
-  },
-  customerName: {
-    fontSize: '14px',
-    fontWeight: '600',
-    marginBottom: '4px',
-  },
-  customerInfo: {
-    fontSize: '12px',
-    color: '#666',
-  },
-  levelBadge: {
-    display: 'inline-block',
-    padding: '2px 6px',
-    borderRadius: '4px',
-    fontSize: '10px',
-    fontWeight: '600',
-    marginTop: '4px',
-  },
-  levelBronze: {
-    background: '#FFE8D6',
-    color: '#8B4513',
-  },
-  levelSilver: {
-    background: '#E8E8E8',
-    color: '#666',
-  },
-  levelGold: {
-    background: '#FFF8E6',
-    color: '#F5A623',
-  },
-
-  reminderItem: {
+  offerCard: {
     background: '#ede8fc',
     border: '1px solid #6C3FE0',
     borderRadius: '12px',
     padding: '12px',
     marginBottom: '12px',
   },
-  reminderTitle: {
-    fontSize: '13px',
+  offerTitle: {
+    fontSize: '14px',
     fontWeight: '600',
     color: '#6C3FE0',
     marginBottom: '4px',
   },
-  reminderText: {
+  offerDesc: {
     fontSize: '12px',
     color: '#666',
     marginBottom: '8px',
   },
-  sendButton: {
+
+  qrContainer: {
+    background: 'white',
+    borderRadius: '12px',
+    padding: '24px',
+    textAlign: 'center',
+  },
+  qrPlaceholder: {
+    width: '220px',
+    height: '220px',
+    background: '#f0f0f0',
+    borderRadius: '12px',
+    margin: '0 auto 16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '64px',
+  },
+  qrCode: {
+    fontSize: '12px',
+    color: '#666',
+    marginBottom: '12px',
+    wordBreak: 'break-all',
+  },
+  timer: {
+    fontSize: '14px',
+    color: '#E24B4A',
+    fontWeight: '600',
+    marginBottom: '12px',
+  },
+  generateBtn: {
     width: '100%',
-    padding: '8px',
+    padding: '12px',
     background: '#6C3FE0',
     color: 'white',
     border: 'none',
-    borderRadius: '6px',
-    fontSize: '12px',
+    borderRadius: '8px',
+    fontSize: '16px',
     fontWeight: '600',
     cursor: 'pointer',
+  },
+
+  transactionItem: {
+    background: 'white',
+    border: '1px solid #e0e0e0',
+    borderRadius: '12px',
+    padding: '12px',
+    marginBottom: '8px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  transactionLeft: {
+    flex: 1,
+  },
+  transactionStore: {
+    fontSize: '14px',
+    fontWeight: '600',
+    marginBottom: '4px',
+  },
+  transactionDate: {
+    fontSize: '12px',
+    color: '#666',
+  },
+  transactionPoints: {
+    fontSize: '16px',
+    fontWeight: '700',
+    color: '#6C3FE0',
   },
 
   bottomNav: {
@@ -293,8 +284,7 @@ const styles = {
     maxWidth: '480px',
     margin: '0 auto',
     display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: '0',
+    gridTemplateColumns: 'repeat(4, 1fr)',
     background: 'white',
     borderTop: '1px solid #e0e0e0',
     padding: '0',
@@ -310,7 +300,6 @@ const styles = {
     cursor: 'pointer',
     fontSize: '11px',
     color: '#666',
-    transition: 'all 0.2s',
   },
   navItemActive: {
     color: '#6C3FE0',
@@ -319,83 +308,130 @@ const styles = {
     fontSize: '24px',
     marginBottom: '4px',
   },
+
+  upgradeButton: {
+    width: '100%',
+    padding: '12px',
+    background: '#F5A623',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '12px',
+  },
 };
 
-export default function VuelveTiendaApp() {
+export default function VuelveUserApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [storeName, setStoreName] = useState('');
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [qrGenerated, setQrGenerated] = useState(null);
-  const [showQRModal, setShowQRModal] = useState(false);
+  const [name, setName] = useState('');
+  const [activeTab, setActiveTab] = useState('home');
+  const [qrTimer, setQrTimer] = useState(null);
+  const [currentQR, setCurrentQR] = useState(null);
   const [showPlanes, setShowPlanes] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (storeName && password) {
+    if (email && password) {
       setIsLoggedIn(true);
     }
   };
 
-  const handleGenerateQR = () => {
-    const qrCode = `QR-${Date.now()}`;
-    setQrGenerated(qrCode);
-    setShowQRModal(true);
+  const handleRegister = (e) => {
+    e.preventDefault();
+    if (email && password && name) {
+      setIsLoggedIn(true);
+      setIsRegister(false);
+    }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setStoreName('');
+    setEmail('');
     setPassword('');
+    setName('');
   };
 
-  // Mock data
-  const metrics = {
-    transacciones: 1243,
-    clientes: 342,
-    revenue: 8.6,
-    promedio: 6950,
+  const handleGenerateQR = () => {
+    const qr = `QR-USER-${Date.now()}`;
+    setCurrentQR(qr);
+    setQrTimer(120);
+    const interval = setInterval(() => {
+      setQrTimer((t) => {
+        if (t <= 1) {
+          clearInterval(interval);
+          setCurrentQR(null);
+          return null;
+        }
+        return t - 1;
+      });
+    }, 1000);
   };
+
+  const user = {
+    name: 'Juan Pérez',
+    puntos: 2340,
+    nivel: 'silver',
+    nextLevel: 3000,
+  };
+
+  const stores = [
+    { id: 1, name: 'Café Vuelve', category: 'Gastronomía', offers: 2, distance: '0.5 km' },
+    { id: 2, name: 'Pet Shop Vuelve', category: 'Mascotas', offers: 1, distance: '1.2 km' },
+    { id: 3, name: 'Almacén Don Juanito', category: 'Almacén', offers: 3, distance: '0.8 km' },
+  ];
 
   const offers = [
-    { id: 1, titulo: '20% descuento en café', desc: 'Válido para cualquier bebida', descuento: 20 },
-    { id: 2, titulo: 'Sándwich + café a $5.990', desc: 'Combo especial', descuento: 15 },
+    { id: 1, store: 'Café Vuelve', title: '20% descuento en café', discount: 20 },
+    { id: 2, store: 'Almacén Don Juanito', title: 'Compra 2 llevas 3', discount: 33 },
   ];
 
-  const customers = [
-    { id: 1, name: 'Juan Pérez', compras: 20, puntos: 2340, nivel: 'silver' },
-    { id: 2, name: 'María García', compras: 15, puntos: 1890, nivel: 'silver' },
-    { id: 3, name: 'Carlos López', compras: 8, puntos: 650, nivel: 'bronze' },
-    { id: 4, name: 'Ana Martínez', compras: 3, puntos: 240, nivel: 'bronze' },
-  ];
-
-  const reminders = [
-    { id: 1, customer: 'Juan Pérez', action: 'No ha comprado en 5 días', message: '¡Vuelve y gana 50 puntos extra!' },
-    { id: 2, customer: 'María García', action: 'Está cerca del nivel Gold', message: 'Te faltan 800 puntos. ¡Tú puedes!' },
+  const transactions = [
+    { id: 1, store: 'Café Vuelve', date: 'Hoy 14:30', points: 85 },
+    { id: 2, store: 'Almacén Don Juanito', date: 'Ayer 10:15', points: 120 },
+    { id: 3, store: 'Café Vuelve', date: 'Hace 2 días', points: 65 },
   ];
 
   if (!isLoggedIn) {
     return (
       <div style={styles.loginScreen}>
-        <div style={styles.loginLogo}>🔄</div>
-        <h1 style={styles.loginTitle}>Vuelve Tienda</h1>
-        <p style={styles.loginSubtitle}>Gestiona tu negocio desde aquí</p>
-        
-        <form onSubmit={handleLogin} style={{ width: '100%', maxWidth: '300px' }}>
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel}>Email de tienda</label>
+        <div style={styles.loginLogo}>💳</div>
+        <h1 style={styles.loginTitle}>Vuelve</h1>
+        <p style={styles.loginSubtitle}>Gana puntos en tus tiendas favoritas</p>
+
+        <form onSubmit={isRegister ? handleRegister : handleLogin} style={{ width: '100%', maxWidth: '300px' }}>
+          {isRegister && (
+            <div style={styles.formGroup}>
+              <label style={styles.label}>Nombre</label>
+              <input
+                type="text"
+                placeholder="Juan Pérez"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                style={styles.input}
+                required
+              />
+            </div>
+          )}
+
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Email</label>
             <input
               type="email"
-              placeholder="cafe@vuelve.cl"
-              value={storeName}
-              onChange={(e) => setStoreName(e.target.value)}
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={styles.input}
               required
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.inputLabel}>Contraseña</label>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Contraseña</label>
             <input
               type="password"
               placeholder="••••••"
@@ -406,13 +442,16 @@ export default function VuelveTiendaApp() {
             />
           </div>
 
-          <button type="submit" style={styles.loginButton}>
-            Inicia sesión
+          <button type="submit" style={styles.button}>
+            {isRegister ? 'Crear cuenta' : 'Inicia sesión'}
           </button>
         </form>
 
-        <p style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>
-          Demo: usa cualquier email y contraseña
+        <p style={styles.toggleText}>
+          {isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}{' '}
+          <span style={styles.toggleLink} onClick={() => setIsRegister(!isRegister)}>
+            {isRegister ? 'Inicia sesión' : 'Regístrate'}
+          </span>
         </p>
       </div>
     );
@@ -420,114 +459,56 @@ export default function VuelveTiendaApp() {
 
   // Si showPlanes es true, mostrar la página de planes
   if (showPlanes) {
-    return <PlanesPage onBack={() => setShowPlanes(false)} />;
+    return <PlanesPage onClose={() => setShowPlanes(false)} />;
   }
 
   return (
     <div style={styles.mobileContainer}>
-      {/* Header */}
       <div style={styles.header}>
-        <h1 style={styles.headerTitle}>Vuelve Tienda</h1>
-        <button style={styles.logoutBtnSmall} onClick={handleLogout}>
-          Cerrar sesión
+        <h1 style={styles.headerTitle}>Vuelve</h1>
+        <button style={styles.profileBtn} onClick={handleLogout}>
+          Logout
         </button>
       </div>
 
-      {/* Content */}
       <div style={styles.content}>
-        {/* DASHBOARD */}
-        {activeTab === 'dashboard' && (
+        {/* HOME */}
+        {activeTab === 'home' && (
           <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-              📊 Resumen del Día
-            </h2>
+            <div style={styles.pointsCard}>
+              <div style={styles.pointsValue}>{user.puntos}</div>
+              <div style={styles.pointsLabel}>Puntos Acumulados</div>
+              <div style={styles.levelBadge}>{user.nivel.toUpperCase()}</div>
+              <div style={styles.levelProgress}>
+                <div style={{
+                  ...styles.levelProgressBar,
+                  width: `${(user.puntos / user.nextLevel) * 100}%`,
+                }}></div>
+              </div>
+              <div style={{ fontSize: '11px', marginTop: '8px', opacity: 0.9 }}>
+                {user.nextLevel - user.puntos} puntos para {user.nivel === 'silver' ? 'GOLD' : 'SILVER'}
+              </div>
 
-            <div style={styles.metricsGrid}>
-              <div style={styles.metricSmall}>
-                <div style={styles.metricValue}>{metrics.transacciones}</div>
-                <div style={styles.metricLabel}>Transacciones</div>
-              </div>
-              <div style={styles.metricSmall}>
-                <div style={styles.metricValue}>{metrics.clientes}</div>
-                <div style={styles.metricLabel}>Clientes</div>
-              </div>
-              <div style={styles.metricSmall}>
-                <div style={styles.metricValue}>${metrics.revenue}M</div>
-                <div style={styles.metricLabel}>Revenue</div>
-              </div>
-              <div style={styles.metricSmall}>
-                <div style={styles.metricValue}>${(metrics.promedio / 1000).toFixed(1)}K</div>
-                <div style={styles.metricLabel}>Promedio</div>
-              </div>
-            </div>
-
-            <div style={styles.card}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
-                ⚡ Acciones Rápidas
-              </h3>
-              <button style={{ ...styles.scanButton, marginBottom: '8px' }}>
-                📱 Validar Compra
-              </button>
-              <button style={styles.generateQRButton} onClick={handleGenerateQR}>
-                🎁 Crear Oferta
-              </button>
               <button style={styles.upgradeButton} onClick={() => setShowPlanes(true)}>
-                🚀 Mejorar Plan
+                ⭐ Mejorar a Plus
               </button>
             </div>
-          </>
-        )}
 
-        {/* SCANNER QR */}
-        {activeTab === 'scanner' && (
-          <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-              📸 Escanear QR
+              🏪 Tiendas Cercanas
             </h2>
-
-            {showQRModal ? (
-              <div style={styles.qrContainer}>
-                <h3 style={{ margin: '0 0 12px 0' }}>QR Generado</h3>
-                <div style={styles.qrPlaceholder}>📦</div>
-                <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
-                  Código: {qrGenerated}
-                </p>
-                <button
-                  style={{
-                    ...styles.scanButton,
-                    background: '#0F6E56',
-                  }}
-                  onClick={() => setShowQRModal(false)}
-                >
-                  Cerrar
-                </button>
+            {stores.map((store) => (
+              <div key={store.id} style={styles.storeCard}>
+                <div style={styles.storeHeader}>
+                  <div>
+                    <div style={styles.storeName}>{store.name}</div>
+                    <div style={styles.storeCategory}>{store.category}</div>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>{store.distance}</div>
+                </div>
+                <span style={styles.offerBadge}>{store.offers} ofertas</span>
               </div>
-            ) : (
-              <>
-                <div style={styles.qrContainer}>
-                  <div style={styles.qrPlaceholder}>📷</div>
-                  <p style={{ fontSize: '12px', color: '#666', marginBottom: '16px' }}>
-                    Apunta la cámara al QR del cliente
-                  </p>
-                  <button style={styles.scanButton}>Activar Cámara</button>
-                </div>
-
-                <div style={styles.card}>
-                  <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
-                    Última Validación
-                  </h3>
-                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>
-                    Cliente: Juan Pérez
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#666', margin: '0 0 8px 0' }}>
-                    Monto: $8.500
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#0F6E56', fontWeight: '600' }}>
-                    ✅ 85 puntos otorgados
-                  </p>
-                </div>
-              </>
-            )}
+            ))}
           </>
         )}
 
@@ -535,94 +516,92 @@ export default function VuelveTiendaApp() {
         {activeTab === 'ofertas' && (
           <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-              🎁 Mis Ofertas
+              🎁 Ofertas Disponibles
             </h2>
             {offers.map((offer) => (
-              <div key={offer.id} style={styles.offerItem}>
-                <h3 style={styles.offerTitle}>{offer.titulo}</h3>
-                <p style={styles.offerDesc}>{offer.desc}</p>
-                <span style={styles.badge}>{offer.descuento}% OFF</span>
-              </div>
-            ))}
-          </>
-        )}
-
-        {/* CLIENTES */}
-        {activeTab === 'clientes' && (
-          <>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-              👥 Mis Clientes ({customers.length})
-            </h2>
-            {customers.map((customer) => (
-              <div key={customer.id} style={styles.customerItem}>
-                <h3 style={styles.customerName}>{customer.name}</h3>
-                <p style={styles.customerInfo}>
-                  {customer.compras} compras • {customer.puntos} puntos
-                </p>
-                <span
-                  style={{
-                    ...styles.levelBadge,
-                    ...(customer.nivel === 'bronze'
-                      ? styles.levelBronze
-                      : styles.levelSilver),
-                  }}
-                >
-                  {customer.nivel.toUpperCase()}
+              <div key={offer.id} style={styles.offerCard}>
+                <div style={styles.offerTitle}>{offer.store}</div>
+                <div style={styles.offerDesc}>{offer.title}</div>
+                <span style={{
+                  display: 'inline-block',
+                  padding: '4px 8px',
+                  background: 'rgba(108, 63, 224, 0.2)',
+                  color: '#6C3FE0',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                }}>
+                  {offer.discount}% OFF
                 </span>
               </div>
             ))}
           </>
         )}
 
-        {/* RECORDATORIOS */}
-        {activeTab === 'recordatorios' && (
+        {/* QR */}
+        {activeTab === 'qr' && (
           <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-              🔔 Recordatorios Inteligentes
+              📱 Tu QR de Pago
             </h2>
-            <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
-              Vuelve analiza a tus clientes y te sugiere cuándo contactarlos
-            </p>
-            {reminders.map((reminder) => (
-              <div key={reminder.id} style={styles.reminderItem}>
-                <h3 style={styles.reminderTitle}>{reminder.customer}</h3>
-                <p style={styles.reminderText}>{reminder.action}</p>
-                <p style={{ fontSize: '12px', color: '#6C3FE0', marginBottom: '8px', fontWeight: '600' }}>
-                  💡 {reminder.message}
-                </p>
-                <button style={styles.sendButton}>
-                  Enviar Notificación
+            {currentQR ? (
+              <div style={styles.qrContainer}>
+                <div style={styles.qrPlaceholder}>📦</div>
+                <div style={styles.qrCode}>{currentQR}</div>
+                <div style={styles.timer}>Expira en: {qrTimer}s</div>
+                <button
+                  style={{ ...styles.generateBtn, background: '#0F6E56' }}
+                  onClick={() => setCurrentQR(null)}
+                >
+                  Cancelar
                 </button>
+              </div>
+            ) : (
+              <>
+                <div style={styles.qrContainer}>
+                  <div style={styles.qrPlaceholder}>📷</div>
+                  <p style={{ fontSize: '12px', color: '#666', margin: '16px 0' }}>
+                    Genera un QR único para cada compra. Válido por 2 minutos
+                  </p>
+                  <button style={styles.generateBtn} onClick={handleGenerateQR}>
+                    Generar QR
+                  </button>
+                </div>
+              </>
+            )}
+          </>
+        )}
+
+        {/* HISTORIAL */}
+        {activeTab === 'historial' && (
+          <>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+              📜 Mi Historial
+            </h2>
+            {transactions.map((t) => (
+              <div key={t.id} style={styles.transactionItem}>
+                <div style={styles.transactionLeft}>
+                  <div style={styles.transactionStore}>{t.store}</div>
+                  <div style={styles.transactionDate}>{t.date}</div>
+                </div>
+                <div style={styles.transactionPoints}>+{t.points}</div>
               </div>
             ))}
           </>
         )}
       </div>
 
-      {/* Bottom Navigation */}
       <div style={styles.bottomNav}>
         <button
           style={{
             ...styles.navItem,
-            ...(activeTab === 'dashboard' ? styles.navItemActive : {}),
+            ...(activeTab === 'home' ? styles.navItemActive : {}),
           }}
-          onClick={() => setActiveTab('dashboard')}
+          onClick={() => setActiveTab('home')}
         >
-          <div style={styles.navIcon}>📊</div>
-          <span>Dashboard</span>
+          <div style={styles.navIcon}>🏠</div>
+          <span>Home</span>
         </button>
-
-        <button
-          style={{
-            ...styles.navItem,
-            ...(activeTab === 'scanner' ? styles.navItemActive : {}),
-          }}
-          onClick={() => setActiveTab('scanner')}
-        >
-          <div style={styles.navIcon}>📸</div>
-          <span>Scanner</span>
-        </button>
-
         <button
           style={{
             ...styles.navItem,
@@ -633,27 +612,25 @@ export default function VuelveTiendaApp() {
           <div style={styles.navIcon}>🎁</div>
           <span>Ofertas</span>
         </button>
-
         <button
           style={{
             ...styles.navItem,
-            ...(activeTab === 'clientes' ? styles.navItemActive : {}),
+            ...(activeTab === 'qr' ? styles.navItemActive : {}),
           }}
-          onClick={() => setActiveTab('clientes')}
+          onClick={() => setActiveTab('qr')}
         >
-          <div style={styles.navIcon}>👥</div>
-          <span>Clientes</span>
+          <div style={styles.navIcon}>📱</div>
+          <span>QR</span>
         </button>
-
         <button
           style={{
             ...styles.navItem,
-            ...(activeTab === 'recordatorios' ? styles.navItemActive : {}),
+            ...(activeTab === 'historial' ? styles.navItemActive : {}),
           }}
-          onClick={() => setActiveTab('recordatorios')}
+          onClick={() => setActiveTab('historial')}
         >
-          <div style={styles.navIcon}>🔔</div>
-          <span>Recordatorios</span>
+          <div style={styles.navIcon}>📜</div>
+          <span>Historial</span>
         </button>
       </div>
     </div>

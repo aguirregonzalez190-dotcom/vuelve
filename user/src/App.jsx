@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PlanesPage from './pages/PlanesPage.jsx';
 
 const styles = {
   mobileContainer: {
     maxWidth: '480px',
     margin: '0 auto',
-    minHeight: '100vh',
+    height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     background: '#f7f7f7',
@@ -16,21 +17,21 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100vh',
     padding: '20px',
     background: 'white',
-    minHeight: '100vh',
   },
-  logo: {
+  loginLogo: {
     fontSize: '48px',
     marginBottom: '20px',
   },
-  title: {
-    fontSize: '28px',
+  loginTitle: {
+    fontSize: '24px',
     fontWeight: '700',
     marginBottom: '8px',
     color: '#6C3FE0',
   },
-  subtitle: {
+  loginSubtitle: {
     fontSize: '14px',
     color: '#666',
     marginBottom: '40px',
@@ -141,26 +142,6 @@ const styles = {
     height: '100%',
     background: 'white',
     borderRadius: '4px',
-  },
-  tabNav: {
-    display: 'flex',
-    gap: '8px',
-    marginBottom: '16px',
-    overflowX: 'auto',
-  },
-  tabBtn: {
-    padding: '8px 16px',
-    border: '1px solid #e0e0e0',
-    background: 'white',
-    borderRadius: '20px',
-    fontSize: '13px',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-  },
-  tabBtnActive: {
-    background: '#6C3FE0',
-    color: 'white',
-    border: '1px solid #6C3FE0',
   },
   card: {
     background: 'white',
@@ -317,6 +298,18 @@ const styles = {
     fontSize: '24px',
     marginBottom: '4px',
   },
+  upgradeButton: {
+    width: '100%',
+    padding: '12px',
+    background: '#F5A623',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '12px',
+  },
 };
 
 export default function VuelveUserApp() {
@@ -328,6 +321,7 @@ export default function VuelveUserApp() {
   const [activeTab, setActiveTab] = useState('home');
   const [qrTimer, setQrTimer] = useState(null);
   const [currentQR, setCurrentQR] = useState(null);
+  const [showPlanes, setShowPlanes] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -367,7 +361,6 @@ export default function VuelveUserApp() {
     }, 1000);
   };
 
-  // Mock data
   const user = {
     name: 'Juan Pérez',
     puntos: 2340,
@@ -395,9 +388,9 @@ export default function VuelveUserApp() {
   if (!isLoggedIn) {
     return (
       <div style={styles.loginScreen}>
-        <div style={styles.logo}>💳</div>
-        <h1 style={styles.title}>Vuelve</h1>
-        <p style={styles.subtitle}>Gana puntos en tus tiendas favoritas</p>
+        <div style={styles.loginLogo}>💳</div>
+        <h1 style={styles.loginTitle}>Vuelve</h1>
+        <p style={styles.loginSubtitle}>Gana puntos en tus tiendas favoritas</p>
 
         <form onSubmit={isRegister ? handleRegister : handleLogin} style={{ width: '100%', maxWidth: '300px' }}>
           {isRegister && (
@@ -453,6 +446,10 @@ export default function VuelveUserApp() {
     );
   }
 
+  if (showPlanes) {
+    return <PlanesPage onClose={() => setShowPlanes(false)} />;
+  }
+
   return (
     <div style={styles.mobileContainer}>
       <div style={styles.header}>
@@ -463,7 +460,6 @@ export default function VuelveUserApp() {
       </div>
 
       <div style={styles.content}>
-        {/* HOME */}
         {activeTab === 'home' && (
           <>
             <div style={styles.pointsCard}>
@@ -479,6 +475,10 @@ export default function VuelveUserApp() {
               <div style={{ fontSize: '11px', marginTop: '8px', opacity: 0.9 }}>
                 {user.nextLevel - user.puntos} puntos para {user.nivel === 'silver' ? 'GOLD' : 'SILVER'}
               </div>
+
+              <button style={styles.upgradeButton} onClick={() => setShowPlanes(true)}>
+                ⭐ Mejorar a Plus
+              </button>
             </div>
 
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
@@ -499,7 +499,6 @@ export default function VuelveUserApp() {
           </>
         )}
 
-        {/* OFERTAS */}
         {activeTab === 'ofertas' && (
           <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
@@ -525,7 +524,6 @@ export default function VuelveUserApp() {
           </>
         )}
 
-        {/* QR */}
         {activeTab === 'qr' && (
           <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
@@ -559,7 +557,6 @@ export default function VuelveUserApp() {
           </>
         )}
 
-        {/* HISTORIAL */}
         {activeTab === 'historial' && (
           <>
             <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
