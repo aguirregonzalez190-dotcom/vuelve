@@ -1,340 +1,304 @@
-# Vuelve Quick Start Guide
+# Quickstart - Cómo Correr Vuelve Localmente
 
-Guía para empezar a desarrollar Vuelve en tu máquina local en 5 minutos.
+## ⚡ TL;DR (2 minutos)
+
+Abre 4 terminales y ejecuta esto en cada una:
+
+**Terminal 1 - Backend**
+```bash
+cd ~/Developer/vuelve/backend && npm install && npm run dev
+```
+
+**Terminal 2 - App Tienda**
+```bash
+cd ~/Developer/vuelve/web && npm install && npm run dev
+```
+
+**Terminal 3 - App Usuario**
+```bash
+cd ~/Developer/vuelve/user && npm install && npm run dev
+```
+
+**Terminal 4 - Landing (opcional)**
+```bash
+cd ~/Developer/vuelve/landing && npm install && npm run dev
+```
+
+Luego abre en navegador:
+- Landing: http://localhost:5175
+- App Tienda: http://localhost:5173
+- App Usuario: http://localhost:5174
 
 ---
 
-## Prerequisites
+## 📋 Requisitos
 
-Asegúrate de tener instalado:
-- **Node.js** (v18 o superior): https://nodejs.org/
-- **Git**: https://git-scm.com/
+- **Node.js** 18+ (https://nodejs.org)
+- **npm** (viene con Node)
+- **Terminal** (Terminal.app en Mac, PowerShell en Windows, cualquiera en Linux)
 
 Verifica:
 ```bash
-node --version    # v18.x.x
-npm --version     # 9.x.x
-git --version     # 2.x.x
+node --version  # debe ser v18+
+npm --version   # debe ser 8+
 ```
 
 ---
 
-## 1. Clone el Repositorio
+## 🚀 Paso a Paso
 
+### Paso 1: Clona o descarga el proyecto
+
+Si ya lo tienes en `~/Developer/vuelve`, salta al Paso 2.
+
+Si no:
 ```bash
-git clone https://github.com/yourusername/vuelve.git
+cd ~/Developer
+git clone https://github.com/aguirregonzalez190-dotcom/vuelve.git
 cd vuelve
 ```
 
----
+### Paso 2: Abre 4 terminales nuevas
 
-## 2. Setup Supabase (Database)
+En Mac: **Cmd + N** para cada una  
+En Windows: **Ctrl + Shift + +** (PowerShell) o abre 4 ventanas de Terminal
 
-### Opción A: Usar Supabase gratuito (Recomendado)
-
-1. Ir a https://supabase.com/ y hacer sign up
-2. Crear nuevo proyecto
-3. En Settings → API, copiar:
-   - `SUPABASE_URL` (Project URL)
-   - `SUPABASE_KEY` (anon key)
-4. Copiar la URL a un lugar seguro
-
-### Opción B: PostgreSQL local (Avanzado)
+### Paso 3: Ejecuta en la Terminal 1 (Backend)
 
 ```bash
-# macOS con Homebrew
-brew install postgresql
-brew services start postgresql
-
-# Linux
-sudo apt install postgresql postgresql-contrib
-sudo systemctl start postgresql
-
-# Verificar
-psql --version
-```
-
----
-
-## 3. Setup Backend
-
-```bash
-cd backend
-
-# Copiar environment
-cp .env.example .env
-
-# Editar .env con tus credenciales
-# nano .env  (o usa tu editor favorito)
-# Pega estos valores:
-# PORT=3000
-# JWT_SECRET=tu-secret-super-seguro
-# SUPABASE_URL=https://xxxxx.supabase.co
-# SUPABASE_KEY=eyJhbGc...
-
-# Instalar dependencias
+cd ~/Developer/vuelve/backend
 npm install
-
-# Iniciar servidor
 npm run dev
 ```
 
-**Salida esperada:**
+**Espera hasta ver:**
 ```
-🚀 Vuelve API corriendo en http://localhost:3000
-📚 Documentación: http://localhost:3000/docs
-```
-
-**Verificar:**
-```bash
-curl http://localhost:3000/health
-# {"status":"ok","timestamp":"2025-01-15T..."}
+Server running on port 3000
 ```
 
----
-
-## 4. Setup Frontend
-
-En una **nueva terminal**:
+### Paso 4: Ejecuta en la Terminal 2 (App Tienda)
 
 ```bash
-cd web
-
-# Instalar dependencias
+cd ~/Developer/vuelve/web
 npm install
-
-# Iniciar dev server
 npm run dev
 ```
 
-**Salida esperada:**
+**Espera hasta ver:**
 ```
-VITE v5.0.8  ready in 123 ms
-
-➜  Local:   http://localhost:5173/
-➜  Press h to show help
+Local:   http://localhost:5173/
 ```
 
-Abre http://localhost:5173 en tu navegador.
+### Paso 5: Ejecuta en la Terminal 3 (App Usuario)
+
+```bash
+cd ~/Developer/vuelve/user
+npm install
+npm run dev
+```
+
+**Espera hasta ver:**
+```
+Local:   http://localhost:5174/
+```
+
+### Paso 6: (Opcional) Ejecuta en la Terminal 4 (Landing)
+
+```bash
+cd ~/Developer/vuelve/landing
+npm install
+npm run dev
+```
+
+**Espera hasta ver:**
+```
+Local:   http://localhost:5175/
+```
+
+### Paso 7: Abre en navegador
+
+Abre un navegador y ve a:
+
+1. **Landing Page**: http://localhost:5175
+   - Hero section
+   - Features
+   - Planes
+   - Email signup
+
+2. **Dashboard Tienda**: http://localhost:5173
+   - Login: cualquier email + contraseña
+   - Dashboard con métricas
+   - Botón "🚀 Mejorar Plan"
+   - Validar códigos: LAUNCH50, BLACK40, REFERRAL
+
+3. **App Usuario**: http://localhost:5174
+   - Registro/Login: cualquier email + contraseña
+   - Home con puntos
+   - Botón "⭐ Mejorar a Plus"
+   - Validar códigos: LAUNCH50, REFERRAL, FRIEND20
 
 ---
 
-## 5. Test the API
+## 🔐 Credenciales Demo
 
-### Registrar un usuario
+No hay credenciales específicas. Usa cualquiera:
 
-```bash
-curl -X POST http://localhost:3000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "password": "Password123!",
-    "name": "Test User"
-  }'
+**Tienda:**
+- Email: `cafe@vuelve.cl` (o cualquiera)
+- Contraseña: `123456` (o cualquiera)
+
+**Usuario:**
+- Email: `juan@vuelve.cl` (o cualquiera)
+- Contraseña: `123456` (o cualquiera)
+
+---
+
+## 🎯 Qué Probar
+
+### App Tienda
+1. ✅ Login
+2. ✅ Ver dashboard con 4 métricas
+3. ✅ Click en "Mejorar Plan"
+4. ✅ Seleccionar Pro o Premium
+5. ✅ Ingresar código: `LAUNCH50`
+6. ✅ Ver descuento aplicado
+7. ✅ Ver precio final calculado
+
+### App Usuario
+1. ✅ Registro
+2. ✅ Ver puntos + nivel
+3. ✅ Click en "Mejorar a Plus"
+4. ✅ Ingresar código: `LAUNCH50`
+5. ✅ Ver beneficios (2x puntos, desafíos, etc)
+6. ✅ Ver precio con descuento
+7. ✅ Generar QR (pestaña QR)
+
+### Landing
+1. ✅ Scroll por hero, features, planes
+2. ✅ Ingresar email en CTA
+3. ✅ Ver respuesta
+
+---
+
+## 🎮 Códigos de Promo para Probar
+
+### Para Tiendas (App en 5173)
+- `LAUNCH50` → 50% off
+- `BLACK40` → 40% off
+- `REFERRAL` → 100% off (1 mes gratis)
+- `UPGRADE50` → 50% off
+
+### Para Usuarios (App en 5174)
+- `LAUNCH50` → 50% off primeros 3 meses
+- `REFERRAL` → 1 mes gratis
+- `FRIEND20` → 20% off
+
+Ingresa cualquier código en el campo de promo y haz click en "Validar" (tienda) o "Usar" (usuario).
+
+---
+
+## 🛑 Troubleshooting
+
+### Puerto ya en uso
+```
+Error: listen EADDRINUSE: address already in use :::3000
 ```
 
-**Respuesta esperada:**
-```json
-{
-  "token": "eyJhbGc...",
-  "user": {
-    "id": "uuid",
-    "email": "test@example.com",
-    "name": "Test User",
-    "puntos": 0,
-    "nivel": "bronze"
-  }
+**Solución**: Cambia el puerto en `vite.config.js` o `.env`:
+```javascript
+// vite.config.js
+server: {
+  port: 3001  // cambio de 3000 a 3001
 }
 ```
 
-Copia el `token` para los siguientes requests.
+### Node no encontrado
+```
+command not found: node
+```
 
-### Generar QR
+**Solución**: Instala Node.js en https://nodejs.org
 
+### npm install lento
+```
+npm notice slow request
+```
+
+**Solución**: Usa npm v9+ o instala dependencias sin optional:
 ```bash
-curl -X POST http://localhost:3000/qr/generate \
-  -H "Authorization: Bearer <PASTE_TOKEN_HERE>" \
-  -H "Content-Type: application/json"
+npm install --no-optional
 ```
 
-### Ver status del API
-
+### Vite no recarga cambios
 ```bash
-curl http://localhost:3000/health
+# Presiona Ctrl + C en la terminal
+# Luego:
+npm run dev
 ```
 
----
-
-## 6. File Structure
-
-```
-vuelve/
-├── README.md
-├── backend/              ← API (Node.js)
-│   ├── server.js
-│   ├── package.json
-│   └── .env.example
-├── web/                  ← Dashboard (React)
-│   ├── src/
-│   ├── package.json
-│   └── vite.config.js
-└── docs/
-    ├── API.md
-    ├── DATABASE.md
-    └── ARCHITECTURE.md
-```
-
----
-
-## 7. Common Commands
-
-### Backend
-
+O borra caché:
 ```bash
-cd backend
-
-npm run dev      # Start dev server (con hot reload)
-npm start        # Start production server
-npm test         # Run tests (cuando existan)
-```
-
-### Frontend
-
-```bash
-cd web
-
-npm run dev      # Start Vite dev server
-npm run build    # Build para producción
-npm run preview  # Preview la build
+rm -rf node_modules/.vite
+npm run dev
 ```
 
 ---
 
-## 8. Environment Variables
+## 📁 Estructura de Carpetas
 
-### Backend (.env)
-
-```env
-PORT=3000
-JWT_SECRET=your-super-secret-key-here
-NODE_ENV=development
-
-# Supabase
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your-anon-key
-
-# Opcionales (agregar cuando implementes)
-FIREBASE_API_KEY=...
-SENDGRID_API_KEY=...
-CLAUDE_API_KEY=...
 ```
-
-### Frontend (.env)
-
-```env
-REACT_APP_API_URL=http://localhost:3000
+backend/
+  server.js          ← Servidor Express
+  package.json
+  
+web/
+  src/App.jsx        ← Dashboard tienda
+  src/pages/PlanesPage.jsx  ← Página de planes
+  vite.config.js
+  
+user/
+  src/App.jsx        ← App usuario
+  src/pages/PlanesPage.jsx  ← Modal de Plus
+  vite.config.js
+  
+landing/
+  src/App.jsx        ← Landing profesional
+  vite.config.js
 ```
 
 ---
 
-## 9. Troubleshooting
+## 🔄 Flujo Típico de Desarrollo
 
-### "Port 3000 already in use"
-
-```bash
-# macOS/Linux
-lsof -i :3000
-kill -9 <PID>
-
-# O cambiar puerto en .env:
-PORT=3001
-```
-
-### "Cannot find module 'express'"
-
-```bash
-cd backend
-npm install
-```
-
-### "ECONNREFUSED on Supabase"
-
-1. Verifica `SUPABASE_URL` y `SUPABASE_KEY` en `.env`
-2. Confirma que el proyecto existe en https://supabase.com
-3. Prueba conectar directamente:
-   ```bash
-   psql "postgresql://[user]:[password]@[host]:5432/[database]"
-   ```
-
-### "CORS Error in browser"
-
-Asegúrate de que `ALLOWED_ORIGINS` en backend incluya `http://localhost:5173`
+1. **Abre 4 terminales**
+2. **Corre npm install** una sola vez en cada carpeta
+3. **npm run dev** para iniciar servidores
+4. **Edita código** en Visual Studio (los cambios se recargan automáticamente)
+5. **Ctrl + R** en navegador si necesitas limpiar caché
 
 ---
 
-## 10. Next Steps
+## 🚀 Próximas Fases
 
-1. **Crear tu rama de desarrollo:**
-   ```bash
-   git checkout -b feature/mi-feature
-   ```
+Para el **evento**, esto está 100% funcional.
 
-2. **Hacer cambios** y commitear:
-   ```bash
-   git add .
-   git commit -m "Feat: describe lo que hiciste"
-   git push origin feature/mi-feature
-   ```
-
-3. **Crear Pull Request** en GitHub
-
-4. **Leer la documentación:**
-   - `API.md` - Endpoints disponibles
-   - `DATABASE.md` - Schema SQL
-   - `ARCHITECTURE.md` - Cómo funciona todo
+Para **después del evento**:
+- Conectar a Supabase real
+- Implementar sistema de pago (Khipu)
+- Recordatorios con IA (Claude API)
+- Push notifications (Firebase)
 
 ---
 
-## 11. VSCode Extensions (Recomendado)
+## 📞 Ayuda
 
-Para mejor experiencia de desarrollo:
+Si algo no funciona:
 
-- **REST Client** - Testear API dentro de VSCode
-- **Thunder Client** - Cliente HTTP alternativo
-- **Postman** - Colección de requests
-
----
-
-## 12. Database Setup (Supabase)
-
-Una vez que tienes Supabase configurado, corre estas queries en el SQL editor:
-
-1. Ve a Supabase Dashboard → SQL Editor
-2. Crea una nueva query
-3. Copia el contenido de `DATABASE.md`
-4. Ejecuta
+1. Verifica que tengas Node 18+: `node --version`
+2. Borra `node_modules` e instala de nuevo: `rm -rf node_modules && npm install`
+3. Mata todos los servidores (Ctrl + C) y reinicia
+4. Abre issue en GitHub: https://github.com/aguirregonzalez190-dotcom/vuelve/issues
 
 ---
 
-## Useful Resources
-
-- **Supabase Docs**: https://supabase.com/docs
-- **Express.js**: https://expressjs.com/
-- **React**: https://react.dev/
-- **API Testing**: https://www.postman.com/
-- **Database Tool**: https://dbeaver.io/
-
----
-
-## Getting Help
-
-- Abre un issue en GitHub
-- Check existing issues first
-- Describe el problema con:
-  - Qué intentaste hacer
-  - Qué error recibiste
-  - Tu setup (Node version, OS, etc)
-
----
-
-**Ready? Start with `npm run dev` in both folders! 🚀**
+**¡Listo! Disfruta explorando Vuelve 🔄**

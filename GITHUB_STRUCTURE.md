@@ -1,351 +1,560 @@
-# Cómo Organizar Vuelve en GitHub
+# 📁 Estructura Actual del Proyecto Vuelve
 
-## Estructura del Repositorio
+Este documento explica en detalle la arquitectura, carpetas y código del proyecto.
+
+---
+
+## 🏗️ Árbol Completo
 
 ```
-vuelve/  (root repo)
-├── README.md          ← Inicio aquí, explica todo
-├── QUICKSTART.md      ← Para devs: setup en 5 min
-├── package.json       ← Root (scripts compartidos)
-├── .gitignore
+vuelve/
+├── backend/
+│   ├── server.js           # Servidor Express (puerto 3000)
+│   ├── package.json        # Dependencias
+│   ├── .env.example        # Variables de entorno
+│   └── .gitignore
 │
-├── backend/           ← API (Node.js + Express)
-│   ├── server.js
-│   ├── package.json
-│   ├── .env.example
+├── web/                    # Dashboard para Tiendas (puerto 5173)
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── models/
-│   │   └── middleware/
-│   └── ...
-│
-├── web/               ← Dashboard (React)
-│   ├── src/
+│   │   ├── App.jsx         # Componente principal con lógica
 │   │   ├── pages/
-│   │   ├── components/
-│   │   └── App.jsx
-│   ├── package.json
-│   ├── vite.config.js
-│   └── ...
+│   │   │   └── PlanesPage.jsx    # Página de planes/suscripción
+│   │   ├── main.jsx        # Entry point React
+│   │   └── styles/         # (vacío, estilos inline)
+│   ├── index.html          # HTML base con div#root
+│   ├── vite.config.js      # Config Vite
+│   ├── package.json        # Dependencias
+│   └── .gitignore
 │
-├── mobile/            ← App (React Native)
+├── user/                   # App para Usuarios (puerto 5174)
 │   ├── src/
-│   ├── app.json
-│   ├── package.json
-│   └── ...
+│   │   ├── App.jsx         # Componente principal
+│   │   ├── pages/
+│   │   │   └── PlanesPage.jsx    # Modal de Plus
+│   │   ├── main.jsx        # Entry point
+│   │   └── styles/         # (vacío)
+│   ├── index.html          # HTML base
+│   ├── vite.config.js      # Config Vite
+│   ├── package.json        # Dependencias
+│   └── .gitignore
 │
-└── docs/
-    ├── API.md
-    ├── DATABASE.md
-    ├── ARCHITECTURE.md
-    └── ...
+├── landing/                # Landing Page (puerto 5175)
+│   ├── src/
+│   │   ├── App.jsx         # Componente landing
+│   │   ├── main.jsx        # Entry point
+│   ├── index.html          # HTML base
+│   ├── vite.config.js      # Config Vite
+│   ├── package.json        # Dependencias
+│   └── .gitignore
+│
+├── docs/                   # Documentación
+│   ├── README.md           # (este archivo)
+│   ├── QUICKSTART.md       # Setup inicial
+│   ├── ESTRUCTURA_ACTUAL.md    # Detalles técnicos
+│   ├── PARA_EL_EVENTO_PLATANUS.md
+│   ├── API.md              # Documentación API
+│   ├── DATABASE.md         # Schema base de datos
+│   └── ARCHITECTURE.md     # Decisiones técnicas
+│
+├── .gitignore             # Archivos ignorados por Git
+├── README.md              # Overview del proyecto
+└── (otros archivos de raíz)
 ```
 
 ---
 
-## Paso 1: Crear Repositorio en GitHub
+## 📱 Frontend - App Tienda (web/)
 
-1. Ir a https://github.com/new
-2. Nombre: `vuelve`
-3. Descripción: "Plataforma de fidelización digital para comercios independientes"
-4. Visibilidad: **Public** (para evento/aceleradoras)
-5. README: Sí (lo reemplazaremos)
-6. .gitignore: Node
-7. Licencia: MIT (opcional)
-8. **Create repository**
+### Puerto: 5173
+### Tech: React 18 + Vite
+
+### App.jsx (Componente Principal)
+
+**Estados principales:**
+```javascript
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [storeName, setStoreName] = useState('');
+const [password, setPassword] = useState('');
+const [activeTab, setActiveTab] = useState('dashboard');
+const [qrGenerated, setQrGenerated] = useState(null);
+const [showQRModal, setShowQRModal] = useState(false);
+const [showPlanes, setShowPlanes] = useState(false);  // ← Nuevo
+```
+
+**Flujo principal:**
+```
+NOT LOGGED IN → Login Screen
+    ↓
+LOGGED IN + !showPlanes → Dashboard App
+    - Tabs: dashboard, scanner, ofertas, clientes, recordatorios
+    - Bottom navigation (5 botones)
+    - Botón "🚀 Mejorar Plan" en dashboard
+    ↓
+showPlanes === true → PlanesPage (full screen)
+    - Selector de planes (Gratis, Pro, Premium)
+    - Validación de códigos de promo
+    - Cálculo de descuentos
+    - Botones de suscripción
+```
+
+### PlanesPage.jsx (Componente de Planes)
+
+**Responsabilidades:**
+- Mostrar 3 planes (Gratis, Pro, Premium)
+- Campo de código de promo con validación
+- Cálculo de precio final con descuentos
+- Tabla comparativa de features
+- Botones de acción
+
+**Mock data de códigos:**
+```javascript
+const promoCodes = {
+  'LAUNCH50': { discount: 50, message: '50% off lanzamiento' },
+  'BLACK40': { discount: 40, message: '40% off Black Friday' },
+  'REFERRAL': { discount: 100, message: '1 mes gratis' },
+  'UPGRADE50': { discount: 50, message: '50% off upgrade' },
+};
+```
+
+**Features comparadas:**
+- Ofertas activas (2 vs ilimitado)
+- Clientes máximo (100 vs ilimitado)
+- Dashboard (básico vs avanzado)
+- Recordatorios IA (no vs sí)
+- Notificaciones push (no vs sí)
+- Análisis avanzado (no vs sí)
+- A/B Testing (no vs no vs sí)
+- Integración POS (no vs no vs sí)
 
 ---
 
-## Paso 2: Clonar y Agregar Archivos
+## 📱 Frontend - App Usuario (user/)
 
-```bash
-git clone https://github.com/yourusername/vuelve.git
-cd vuelve
+### Puerto: 5174
+### Tech: React 18 + Vite
 
-# Copiar archivos creados
-# Backend
-mkdir -p backend/{src/{controllers,routes,models,middleware,utils,config},docs}
-cp backend-server.js backend/server.js
-cp backend-package.json backend/package.json
-cp backend-env.example backend/.env.example
+### App.jsx (Componente Principal)
 
-# Web
-mkdir -p web/{src/{pages,components,services,styles},public}
-cp web-dashboard.jsx web/src/App.jsx
-cp web-dashboard.css web/src/styles/App.css
-cp web-package.json web/package.json
+**Estados principales:**
+```javascript
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [isRegister, setIsRegister] = useState(false);
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [name, setName] = useState('');
+const [activeTab, setActiveTab] = useState('home');
+const [qrTimer, setQrTimer] = useState(null);
+const [currentQR, setCurrentQR] = useState(null);
+const [showPlanes, setShowPlanes] = useState(false);  // ← Nuevo
+```
 
-# Documentación
-cp README.md .
-cp ARCHITECTURE.md docs/
-cp API.md docs/
-cp DATABASE.md docs/
-cp QUICKSTART.md .
-cp .gitignore .
-cp root-package.json package.json
+**Flujo principal:**
+```
+NOT LOGGED IN → Login/Register Screen
+    ↓
+LOGGED IN + !showPlanes → App Completa
+    - Tabs: home, ofertas, qr, historial
+    - Bottom navigation (4 botones)
+    - Card de puntos + "⭐ Mejorar a Plus"
+    ↓
+showPlanes === true → PlanesPage Modal
+    - Hero con ⭐ Desbloquea Plus
+    - Grid 2x2 de beneficios
+    - Card con precio ($2.495 con 50% off)
+    - Lista de features incluidas
+    - FAQ section
+    - Botones de acción
+```
+
+### PlanesPage.jsx (Modal de Plus)
+
+**Responsabilidades:**
+- Mostrar propuesta de Plus
+- Grid 2x2 de beneficios (2x puntos, desafíos, canjes, referral)
+- Validación de códigos de promo
+- Cálculo de precio + ahorro
+- Tabla comparativa Gratis vs Plus
+- FAQ con 3 preguntas comunes
+
+**Mock data de códigos:**
+```javascript
+const promoCodes = {
+  'LAUNCH50': { discount: 50, message: '50% off primeros 3 meses' },
+  'REFERRAL': { discount: 100, message: '1 mes gratis' },
+  'FRIEND20': { discount: 20, message: 'Referral 20% off' },
+};
+```
+
+**Beneficios de Plus:**
+- 2x puntos en todas las compras
+- Desafíos semanales con premios
+- Canjes ilimitados (vs 3/mes en gratis)
+- Referral program (gana sin límite)
+- Recomendaciones personalizadas
+- Sin publicidad
+- Acceso a features beta
+
+---
+
+## 🌐 Frontend - Landing (landing/)
+
+### Puerto: 5175
+### Tech: React 18 + Vite
+
+### App.jsx (Landing Page)
+
+**Secciones:**
+1. **Navigation** - Logo, links, botón CTA
+2. **Hero** - Título grande, subtítulo, 2 botones (Comenzar, Ver Demo)
+3. **Features** - 6 cards (App usuario, Dashboard, IA, Puntos, Para todos, Setup rápido)
+4. **Plans** - 4 cards (Gratis, Pro, Plus, Premium)
+5. **Stats** - 4 números (342 tiendas, 8K+ usuarios, $12.9M, 98% satisfacción)
+6. **CTA** - Email signup con validación
+7. **Footer** - Copyright, links
+
+**Paleta de colores:**
+- Principal: `#6C3FE0` (púrpura)
+- Secundario: `#0F6E56` (verde)
+- Background: `#f7f7f7` (gris claro)
+- Text: `#1a1a1a` (casi negro)
+
+---
+
+## 🔧 Backend (backend/)
+
+### Puerto: 3000
+### Tech: Node.js + Express
+
+### server.js (Componente Principal)
+
+**Endpoints mock (sin BD real aún):**
+
+```javascript
+// POST /auth/register
+// Retorna: { token, user: { id, puntos, nivel } }
+
+// POST /auth/login
+// Retorna: { token, user: { id, puntos, nivel } }
+
+// POST /tiendas/crear-oferta
+// Body: { tiendaId, titulo, descuento }
+// Retorna: { success, ofertaId }
+
+// GET /tiendas/:id/clientes
+// Retorna: [ { id, name, puntos, compras } ]
+
+// POST /transacciones/validar-qr
+// Body: { qrCode, tiendaId, monto }
+// Retorna: { success, puntosOtorgados, nuevoTotal }
+```
+
+**Estructura (para después del evento):**
+
+```
+backend/
+├── src/
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── storeController.js
+│   │   ├── userController.js
+│   │   └── transactionController.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Store.js
+│   │   ├── Offer.js
+│   │   └── Transaction.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── stores.js
+│   │   ├── users.js
+│   │   └── transactions.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── validation.js
+│   └── server.js
 ```
 
 ---
 
-## Paso 3: Estructura de Carpetas (Crear manualmente)
+## 📊 Base de Datos (Supabase PostgreSQL)
+
+### Tablas Principales
+
+#### users
+```sql
+id UUID PRIMARY KEY
+email VARCHAR UNIQUE NOT NULL
+password_hash VARCHAR NOT NULL
+name VARCHAR
+puntos INTEGER DEFAULT 0
+nivel VARCHAR (bronze/silver/gold)
+plan VARCHAR (gratis/plus)
+created_at TIMESTAMP
+```
+
+#### stores
+```sql
+id UUID PRIMARY KEY
+email VARCHAR UNIQUE NOT NULL
+password_hash VARCHAR NOT NULL
+name VARCHAR NOT NULL
+plan VARCHAR (gratis/pro/premium)
+metrics_transacciones INTEGER
+metrics_clientes INTEGER
+metrics_revenue DECIMAL
+created_at TIMESTAMP
+```
+
+#### offers
+```sql
+id UUID PRIMARY KEY
+store_id UUID REFERENCES stores(id)
+titulo VARCHAR NOT NULL
+descripcion TEXT
+descuento INTEGER
+active BOOLEAN
+created_at TIMESTAMP
+```
+
+#### transactions
+```sql
+id UUID PRIMARY KEY
+user_id UUID REFERENCES users(id)
+store_id UUID REFERENCES stores(id)
+monto DECIMAL NOT NULL
+puntos_otorgados INTEGER
+qr_code VARCHAR
+validated_at TIMESTAMP
+created_at TIMESTAMP
+```
+
+#### subscription_plans (futuro)
+```sql
+id UUID PRIMARY KEY
+name VARCHAR (gratis/pro/premium/plus)
+price DECIMAL
+features JSONB
+created_at TIMESTAMP
+```
+
+---
+
+## 🔐 Autenticación (Futuro)
+
+### JWT Strategy
+```javascript
+// Header
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+// Payload
+{
+  "sub": "user-123",
+  "email": "juan@vuelve.cl",
+  "tipo": "usuario",  // o "tienda"
+  "plan": "gratis",
+  "iat": 1234567890,
+  "exp": 1234571490
+}
+
+// Signature
+HMACSHA256(header + payload, secret)
+```
+
+---
+
+## 📦 Dependencias Principales
+
+### Frontend (web + user + landing)
+```json
+{
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  "vite": "^5.0.8"
+}
+```
 
 ### Backend
-
-```bash
-mkdir -p backend/src/{controllers,routes,models,middleware,utils,config}
-
-# Crear archivos vacíos de ejemplo
-touch backend/src/controllers/authController.js
-touch backend/src/controllers/pointsController.js
-touch backend/src/routes/auth.js
-touch backend/src/routes/qr.js
-touch backend/src/models/User.js
-touch backend/src/middleware/authMiddleware.js
-```
-
-### Web
-
-```bash
-mkdir -p web/src/{pages,components,services,styles,hooks,utils}
-mkdir -p web/public
-
-# Crear componentes base
-touch web/src/pages/Dashboard.jsx
-touch web/src/components/Header.jsx
-touch web/src/services/api.js
-```
-
-### Mobile
-
-```bash
-mkdir -p mobile/src/{screens,components,services,hooks,utils,styles}
-
-# Solo estructura, no código aún
+```json
+{
+  "express": "^4.18.2",
+  "cors": "^2.8.5",
+  "dotenv": "^16.3.1",
+  "@supabase/supabase-js": "^2.38.4",
+  "jwt-simple": "^0.5.6",
+  "bcryptjs": "^2.4.3",
+  "uuid": "^9.0.0"
+}
 ```
 
 ---
 
-## Paso 4: Commit Inicial
+## 🚀 Flujos de Datos
 
+### Flujo de Login/Registro (Usuario)
+
+```
+1. Usuario ingresa email + password en Form
+2. onClick(handleRegister) / onClick(handleLogin)
+3. Se valida que ambos campos están llenos
+4. Se setea isLoggedIn = true
+5. UI renderiza App (tabs + navigation)
+6. Mock data de tiendas, ofertas, transacciones aparece
+```
+
+### Flujo de Upgrade a Plus
+
+```
+1. Usuario hace click en "⭐ Mejorar a Plus"
+2. showPlanes = true
+3. PlanesPage se renderiza (modal)
+4. Usuario ingresa código de promo (ej: LAUNCH50)
+5. onClick(handlePromoValidate)
+6. Si válido: discount = 50, muestra ✅ Descuento aplicado
+7. Precio se recalcula: $4.990 × 0.5 = $2.495
+8. Usuario hace click en "Suscribirse"
+9. Alert confirma la suscripción
+```
+
+### Flujo de Generación de QR (Usuario)
+
+```
+1. Usuario abre pestaña "QR"
+2. Ve botón "Generar QR"
+3. onClick(handleGenerateQR)
+4. Se genera QR único: QR-USER-{timestamp}
+5. Timer comienza en 120 segundos
+6. QR aparece en pantalla con contador
+7. Cada segundo: setQrTimer(t - 1)
+8. Cuando timer = 0: QR desaparece, currentQR = null
+9. Usuario puede generar otro QR
+```
+
+---
+
+## 🎨 Design System
+
+### Colores
+- **Primary**: `#6C3FE0` (Púrpura)
+- **Secondary**: `#0F6E56` (Verde)
+- **Background**: `#f7f7f7` (Gris)
+- **Text Dark**: `#1a1a1a`
+- **Text Light**: `#666`
+- **Border**: `#e0e0e0`
+
+### Tipografía
+- **Font-family**: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
+- **Headings**: Bold (700)
+- **Body**: Regular (400)
+
+### Spacing
+- **Small**: 8px
+- **Medium**: 16px
+- **Large**: 24px
+- **XL**: 32px+
+
+### Radius
+- **Buttons**: 8px
+- **Cards**: 12px
+- **Large elements**: 16px
+
+---
+
+## 🔄 Git Workflow
+
+### Commits recientes
+```
+Feat: Add subscription plans UI for stores and users
+Feat: Add landing page for Vuelve
+Feat: Add subscription plans page for users
+Feat: Add subscription plans page for stores
+```
+
+### Cómo pushear cambios
 ```bash
+cd ~/Developer/vuelve
 git add .
-git commit -m "Initial commit: Vuelve MVP architecture
-
-- Backend: Express API con autenticación JWT
-- Web: React dashboard para tiendas
-- Documentación: API, DB schema, arquitectura
-- Ready for local development"
-
+git commit -m "Feat: [descripción corta]"
 git push origin main
 ```
 
 ---
 
-## Paso 5: Crear README Presentable
+## 📈 Métricas & Tracking (Futuro)
 
-El README.md ya está optimizado, pero asegúrate de que contenga:
+### Event tracking (con Mixpanel/Plausible)
+```
+- user_signup
+- user_login
+- plan_upgrade_viewed
+- plan_upgrade_completed
+- qr_generated
+- qr_scanned
+- offer_viewed
+- offer_applied
+```
 
-✅ Logo/nombre proyecto  
-✅ Descripción corta  
-✅ "El Problema" + "La Solución"  
-✅ Screenshot/demo  
-✅ Stack tecnológico  
-✅ Quick start (3 comandos)  
-✅ Roadmap  
-✅ Estructura del proyecto  
-
----
-
-## Paso 6: GitHub Pages (Opcional)
-
-Para que tu README se vea bonito:
-
-1. Settings → Pages
-2. Source: Deploy from branch
-3. Branch: main, folder: /root
-4. Visit: https://yourusername.github.io/vuelve
-
----
-
-## Para el Evento de Aceleradoras
-
-### En tu perfil de GitHub:
-
-- ✅ **Bio**: "Building Vuelve - Loyalty platform for independent stores 🇨🇱"
-- ✅ **Website**: Link a vuelve.cl (cuando exista)
-- ✅ **Location**: Santiago, Chile
-
-### En el README principal:
-
-```markdown
-# 🚀 Status: MVP en desarrollo
-
-Vuelve es una plataforma de fidelización digital para comercios independientes.
-
-**Viendo en el evento?** Echa un vistazo a:
-- [Quick Start](./QUICKSTART.md) - Setup en 5 minutos
-- [Documentación Técnica](./docs/ARCHITECTURE.md)
-- [Roadmap](#roadmap)
-
-**¿Preguntas?** [@VuelveApp](https://twitter.com/VuelveApp) | info@vuelve.cl
+### Performance metrics
+```
+- Lighthouse score
+- Core Web Vitals
+- Page load time
+- API response time
 ```
 
 ---
 
-## Estructura de Ramas (Recomendado)
+## 🛠️ Herramientas de Desarrollo
 
-```
-main (producción)
-  ├── develop (desarrollo)
-  │   ├── feature/auth
-  │   ├── feature/points-system
-  │   ├── feature/qr-validation
-  │   └── bugfix/cors-issues
-  └── staging
-```
+### Debugging
+- **Browser DevTools** (F12 o Cmd+Option+I)
+- **Console.log** en código
+- **Network tab** para ver requests
 
-**Comando para crear rama:**
-
-```bash
-git checkout develop
-git pull origin develop
-git checkout -b feature/tu-feature
-# ... hacer cambios ...
-git push origin feature/tu-feature
-# Pull request en GitHub
-```
+### Performance
+- **Lighthouse** (chrome://inspect)
+- **React DevTools** extension
+- **Vite Dashboard** (cuando corre con --debug)
 
 ---
 
-## Badges en el README
+## 📝 Próximos Pasos Técnicos
 
-Para verse profesional, agrega badges:
+1. **Conectar a Supabase real**
+   - Crear tablas
+   - Importar datos seed
+   - Ajustar queries
 
-```markdown
-# Vuelve 🔄
+2. **Implementar autenticación JWT real**
+   - Validar credenciales contra BD
+   - Generar tokens reales
+   - Validar tokens en requests
 
-[![Status](https://img.shields.io/badge/status-MVP_Development-yellow)]()
-[![License](https://img.shields.io/badge/license-PRIVATE-red)]()
-[![Node](https://img.shields.io/badge/Node.js-18%2B-green)]()
-[![React](https://img.shields.io/badge/React-18.2%2B-blue)]()
-```
+3. **Integración de Pagos (Khipu)**
+   - Crear endpoint POST /pagos/crear
+   - Recibir webhooks de Khipu
+   - Actualizar plan en BD
 
-Resultado:  
-![Status](https://img.shields.io/badge/status-MVP_Development-yellow) ![License](https://img.shields.io/badge/license-PRIVATE-red) ![Node](https://img.shields.io/badge/Node.js-18+-green) ![React](https://img.shields.io/badge/React-18.2+-blue)
+4. **Notificaciones Push (Firebase)**
+   - Registrar device tokens
+   - Enviar push desde backend
+   - Manejar clicks en notificaciones
 
----
-
-## .gitignore en cada carpeta
-
-```bash
-# backend/.gitignore
-node_modules/
-.env
-.env.local
-dist/
-npm-debug.log
-
-# web/.gitignore
-node_modules/
-.env.local
-dist/
-.vite/
-
-# mobile/.gitignore
-node_modules/
-.env
-dist/
-.expo/
-```
+5. **IA (Claude API)**
+   - Generar mensajes de recordatorio
+   - Detectar churn
+   - Sugerencias de ofertas
 
 ---
 
-## Issues & Discussions
+## 🎯 Conclusión
 
-Para el evento, pre-llena algunos issues:
+Este documento resume la estructura actual (MVP). Todos los componentes están funcionales localmente, listos para el evento.
 
-```markdown
-### Issue: Auth System Implementation
-
-Implementar autenticación JWT:
-- [ ] Login endpoint
-- [ ] Register endpoint
-- [ ] Token refresh
-- [ ] Middleware de protección
-
-Assignee: @yourusername
-Labels: backend, auth, good-first-issue
-```
+Para el **después del evento**, necesitamos conectar el backend real + BD + pagos + IA.
 
 ---
 
-## GitHub Actions (CI/CD)
-
-Crear `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy
-
-on:
-  push:
-    branches: [main, develop]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm install-all
-      - run: npm test
-```
-
----
-
-## Checklist antes del Evento
-
-- [ ] README.md está completo y claro
-- [ ] QUICKSTART.md tiene instrucciones de setup
-- [ ] Código en main está limpio y comentado
-- [ ] .gitignore configurado
-- [ ] Archivos sensibles (.env) están en .env.example
-- [ ] Documentación (API.md, DATABASE.md) existe
-- [ ] Al menos 1 commit inicial está hecho
-- [ ] Perfil de GitHub está actualizado
-- [ ] Descripción del repo es clara
-
----
-
-## Tips para Impresionar en el Evento
-
-1. **README profesional** - Gente lee esto primero
-2. **Code limpio** - Comentarios, estructura clara
-3. **Documentación técnica** - Muestra que pensaste en arquitectura
-4. **Setup fácil** - QUICKSTART.md con 3 comandos
-5. **Roadmap visible** - Plan claro para los próximos meses
-6. **Commits limpios** - Historia legible del proyecto
-
----
-
-## Después del Evento
-
-1. Seguir desarrollando en rama `develop`
-2. Hacer PRs hacia `main` cuando termine feature
-3. Implementar CI/CD
-4. Agregar tests
-5. Documentación viva (mantenerla actualizada)
-
----
-
-**Ready to push? 🚀**
-
-```bash
-git remote add origin https://github.com/yourusername/vuelve.git
-git branch -M main
-git push -u origin main
-```
-
-Luego ve a https://github.com/yourusername/vuelve y verifica que todo está.
+*Última actualización: 3 de Julio 2025*
