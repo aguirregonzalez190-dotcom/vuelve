@@ -1,483 +1,444 @@
 import React, { useState } from 'react';
 
-const styles = {
-  body: {
-    margin: 0,
-    padding: 0,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: '#1a1a1a',
-    background: '#ffffff',
-  },
-  
-  // Navigation
-  nav: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    background: 'white',
-    padding: '16px 40px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    zIndex: 100,
-  },
-  logo: {
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#6C3FE0',
-  },
-  navLinks: {
-    display: 'flex',
-    gap: '32px',
-    listStyle: 'none',
-    margin: 0,
-    padding: 0,
-  },
-  navLink: {
-    fontSize: '14px',
-    color: '#666',
-    textDecoration: 'none',
-    cursor: 'pointer',
-    transition: 'color 0.2s',
-  },
-  ctaButton: {
-    padding: '10px 24px',
-    background: '#6C3FE0',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  },
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.classList.remove('pulse-target');
+  // eslint-disable-next-line no-unused-expressions
+  el.offsetWidth; // reflow para poder re-disparar la animación
+  el.classList.add('pulse-target');
+  setTimeout(() => el.classList.remove('pulse-target'), 1000);
+}
 
-  // Hero
-  hero: {
-    background: 'linear-gradient(135deg, #6C3FE0 0%, #4a2c8f 100%)',
-    color: 'white',
-    padding: '120px 40px 80px',
-    textAlign: 'center',
-    marginTop: '60px',
-  },
-  heroTitle: {
-    fontSize: '48px',
-    fontWeight: '700',
-    marginBottom: '16px',
-    lineHeight: '1.2',
-  },
-  heroSubtitle: {
-    fontSize: '20px',
-    opacity: 0.95,
-    marginBottom: '32px',
-    maxWidth: '600px',
-    margin: '0 auto 32px',
-  },
-  heroCTA: {
-    display: 'inline-block',
-    padding: '14px 40px',
-    background: 'white',
-    color: '#6C3FE0',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginRight: '16px',
-  },
-  heroCTASecondary: {
-    display: 'inline-block',
-    padding: '14px 40px',
-    background: 'transparent',
-    color: 'white',
-    border: '2px solid white',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  },
+function LogoMark({ size = 34 }) {
+  return (
+    <div className="brand__mark" style={{ width: size, height: size }}>
+      <svg width={size * 0.56} height={size * 0.56} viewBox="0 0 24 24" fill="none">
+        <path d="M4 12a8 8 0 0 1 8-8c2.5 0 4.7 1.2 6 3" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M20 12a8 8 0 0 1-8 8c-2.5 0-4.7-1.2-6-3" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M16 5l2 2-2 2" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8 19l-2-2 2-2" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+}
 
-  // Section
-  section: {
-    padding: '80px 40px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  sectionTitle: {
-    fontSize: '36px',
-    fontWeight: '700',
-    marginBottom: '48px',
-    textAlign: 'center',
-  },
-  sectionSubtitle: {
-    fontSize: '18px',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: '12px',
-  },
-
-  // Features Grid
-  featuresGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '32px',
-  },
-  featureCard: {
-    padding: '32px',
-    background: '#f7f7f7',
-    borderRadius: '12px',
-    textAlign: 'center',
-  },
-  featureIcon: {
-    fontSize: '48px',
-    marginBottom: '16px',
-  },
-  featureTitle: {
-    fontSize: '18px',
-    fontWeight: '600',
-    marginBottom: '12px',
-  },
-  featureDescription: {
-    fontSize: '14px',
-    color: '#666',
-    lineHeight: '1.6',
-  },
-
-  // Plans
-  plansGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '32px',
-  },
-  planCard: {
-    background: 'white',
-    border: '1px solid #e0e0e0',
-    borderRadius: '12px',
-    padding: '32px',
-  },
-  planCardHighlight: {
-    background: '#ede8fc',
-    border: '2px solid #6C3FE0',
-  },
-  planName: {
-    fontSize: '20px',
-    fontWeight: '700',
-    marginBottom: '8px',
-  },
-  planPrice: {
-    fontSize: '32px',
-    fontWeight: '700',
-    color: '#6C3FE0',
-    marginBottom: '4px',
-  },
-  planPeriod: {
-    fontSize: '12px',
-    color: '#666',
-    marginBottom: '24px',
-  },
-  planFeatures: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    marginBottom: '24px',
-  },
-  planFeature: {
-    fontSize: '13px',
-    color: '#666',
-    padding: '8px 0',
-    borderBottom: '1px solid #e0e0e0',
-  },
-  planFeatureLast: {
-    borderBottom: 'none',
-  },
-  planButton: {
-    width: '100%',
-    padding: '12px',
-    background: '#6C3FE0',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  },
-
-  // Stats
-  stats: {
-    background: '#f7f7f7',
-    padding: '80px 40px',
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '32px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    textAlign: 'center',
-  },
-  statValue: {
-    fontSize: '36px',
-    fontWeight: '700',
-    color: '#6C3FE0',
-    marginBottom: '8px',
-  },
-  statLabel: {
-    fontSize: '14px',
-    color: '#666',
-  },
-
-  // CTA Section
-  ctaSection: {
-    background: 'linear-gradient(135deg, #6C3FE0 0%, #4a2c8f 100%)',
-    color: 'white',
-    padding: '80px 40px',
-    textAlign: 'center',
-  },
-  ctaSectionTitle: {
-    fontSize: '36px',
-    fontWeight: '700',
-    marginBottom: '16px',
-  },
-  ctaSectionSubtitle: {
-    fontSize: '16px',
-    opacity: 0.95,
-    marginBottom: '32px',
-  },
-  ctaSectionButton: {
-    padding: '14px 40px',
-    background: 'white',
-    color: '#6C3FE0',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  },
-
-  // Footer
-  footer: {
-    background: '#1a1a1a',
-    color: 'white',
-    padding: '40px',
-    textAlign: 'center',
-    fontSize: '12px',
-  },
-
-  // Mobile responsive
-  '@media (max-width: 768px)': {
-    featuresGrid: {
-      gridTemplateColumns: '1fr',
-    },
-    plansGrid: {
-      gridTemplateColumns: '1fr',
-    },
-    statsGrid: {
-      gridTemplateColumns: 'repeat(2, 1fr)',
-    },
-    navLinks: {
-      display: 'none',
-    },
-  },
+// Iconos simples, propios, sin librerías externas
+const icons = {
+  dashboard: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <rect x="4" y="12" width="4" height="8" rx="1" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="10" y="7" width="4" height="13" rx="1" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="16" y="4" width="4" height="16" rx="1" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  ),
+  bell: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M10 18.5a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  ),
+  bolt: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M13 3 5 13h5l-1 8 8-10h-5l1-8Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    </svg>
+  ),
+  coin: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12 8v8M9.5 10a2.5 2 0 0 1 2.5-1.5c1.4 0 2.5.7 2.5 1.7s-1 1.4-2.5 1.8-2.5.8-2.5 1.8 1.1 1.7 2.5 1.7A2.6 2.6 0 0 0 14.5 14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  ),
+  star: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="m12 4 2.4 5.1 5.6.6-4.2 3.8 1.2 5.5L12 16.3 7 19l1.2-5.5-4.2-3.8 5.6-.6L12 4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  ),
+  gift: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <rect x="4" y="9" width="16" height="11" rx="1.2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4 13h16M12 9v11" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12 9c-1.8 0-4-1-4-3s1.6-2.5 2.6-1.7C11.6 5.1 12 7 12 9Zm0 0c1.8 0 4-1 4-3s-1.6-2.5-2.6-1.7C12.4 5.1 12 7 12 9Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  ),
 };
+
+const negociosFeatures = [
+  { icon: icons.dashboard, title: 'Panel en vivo', text: 'Transacciones, clientes y ticket promedio en tiempo real, sin planillas.' },
+  { icon: icons.bell, title: 'Recordatorios con IA', text: 'Detecta quién dejó de venir y le manda la oferta justa, sola.' },
+  { icon: icons.bolt, title: 'Ofertas relámpago', text: 'Crea un 2x1 en 30 segundos. Sin diseñador ni programador.' },
+];
+
+const personasFeatures = [
+  { icon: icons.coin, title: '1 punto cada $100', text: 'Sin letra chica. Acumulas apenas pagas, en cualquier tienda Vuelve.' },
+  { icon: icons.star, title: 'Sube de nivel', text: 'Bronze, Silver, Gold: mientras más vuelves, mejores beneficios.' },
+  { icon: icons.gift, title: 'Ofertas solo para ti', text: 'Descuentos exclusivos en las tiendas que ya visitas seguido.' },
+];
+
+const rubros = ['Cafeterías', 'Almacenes', 'Peluquerías', 'Farmacias', 'Ferreterías', 'Panaderías', 'Pet shops', 'Minimarkets', 'Verdulerías', 'Librerías'];
 
 export default function LandingPage() {
   const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
-    alert(`¡Gracias! Te contactaremos en ${email}`);
+    if (!email) return;
+    setSent(true);
     setEmail('');
+    setTimeout(() => setSent(false), 3000);
   };
 
   return (
-    <div style={styles.body}>
-      {/* Navigation */}
-      <nav style={styles.nav}>
-        <div style={styles.logo}>🔄 Vuelve</div>
-        <ul style={styles.navLinks}>
-          <li><a href="#features" style={styles.navLink}>Features</a></li>
-          <li><a href="#planes" style={styles.navLink}>Planes</a></li>
-          <li><a href="#stats" style={styles.navLink}>Estadísticas</a></li>
-          <li><a href="#contact" style={styles.navLink}>Contacto</a></li>
-        </ul>
-        <button style={styles.ctaButton}>Iniciar Sesión</button>
+    <div>
+      {/* NAV */}
+      <nav className="nav">
+        <div className="container nav__inner">
+          <a href="#top" className="brand">
+            <LogoMark />
+            Vuelve
+          </a>
+          <ul className="nav__links">
+            <li><a href="#negocios" onClick={(e) => { e.preventDefault(); scrollToSection('negocios'); }}>Negocios</a></li>
+            <li><a href="#personas" onClick={(e) => { e.preventDefault(); scrollToSection('personas'); }}>Personas</a></li>
+            <li><a href="#precios" onClick={(e) => { e.preventDefault(); scrollToSection('precios'); }}>Precios</a></li>
+            <li><a href="#rubros" onClick={(e) => { e.preventDefault(); scrollToSection('rubros'); }}>Rubros</a></li>
+          </ul>
+          <div className="nav__actions">
+            <button className="btn btn--ghost btn--sm">Iniciar sesión</button>
+            <button className="btn btn--violet btn--sm" onClick={() => scrollToSection('precios')}>Comenzar</button>
+          </div>
+        </div>
       </nav>
 
-      {/* Hero */}
-      <section style={styles.hero}>
-        <h1 style={styles.heroTitle}>Fidelización que Funciona</h1>
-        <p style={styles.heroSubtitle}>
-          Plataforma completa para que tus clientes acumulen puntos y vuelvan más seguido
-        </p>
-        <button style={styles.heroCTA}>Comenzar Ahora</button>
-        <button style={styles.heroCTASecondary}>Ver Demo</button>
-      </section>
-
-      {/* Features */}
-      <section id="features" style={styles.section}>
-        <h2 style={styles.sectionTitle}>¿Por qué Vuelve?</h2>
-        <div style={styles.featuresGrid}>
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>📱</div>
-            <h3 style={styles.featureTitle}>App para Usuarios</h3>
-            <p style={styles.featureDescription}>
-              Los clientes acumulan puntos, ven ofertas y generan QR desde su celular
+      {/* HERO */}
+      <header id="top" className="hero">
+        <div className="container hero__grid">
+          <div>
+            <span className="eyebrow eyebrow--violet">Fidelización para el comercio de barrio</span>
+            <h1>Que cada compra <span>valga la próxima</span>.</h1>
+            <p className="lead">
+              Vuelve conecta a las tiendas de tu barrio con las personas que las visitan.
+              Ellas acumulan puntos y suben de nivel. Tú recuperas clientes antes de perderlos.
             </p>
+
+            <div className="switch">
+              <button className="is-green" onClick={() => scrollToSection('negocios')}>
+                {icons.dashboard} Tengo un negocio
+              </button>
+              <button className="is-mango" onClick={() => scrollToSection('personas')}>
+                {icons.coin} Soy una persona
+              </button>
+            </div>
+            <p className="switch__hint">Elige tu mundo — ambos son gratis para empezar.</p>
           </div>
 
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>📊</div>
-            <h3 style={styles.featureTitle}>Dashboard Tienda</h3>
-            <p style={styles.featureDescription}>
-              Análisis real-time de clientes, ventas, recordatorios inteligentes
-            </p>
+          <div className="loop">
+            <div className="loop__ring" />
+            <div className="loop__center">
+              <strong>El loop</strong>
+              <span>de Vuelve</span>
+            </div>
+            <div className="loop__node loop__node--1">
+              <b>1. Compra</b>
+              <small>En su café o almacén de siempre</small>
+            </div>
+            <div className="loop__node loop__node--2">
+              <b>2. Gana puntos</b>
+              <small>1 pto por cada $100</small>
+            </div>
+            <div className="loop__node loop__node--3">
+              <b>3. Vuelve</b>
+              <small>Recordatorio justo a tiempo</small>
+            </div>
+            <div className="loop__node loop__node--4">
+              <b>4. Canjea</b>
+              <small>Descuentos y sube de nivel</small>
+            </div>
           </div>
+        </div>
+      </header>
 
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>🤖</div>
-            <h3 style={styles.featureTitle}>IA Inteligente</h3>
-            <p style={styles.featureDescription}>
-              Recordatorios automáticos, A/B testing, predicción de churn
-            </p>
-          </div>
-
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>🎯</div>
-            <h3 style={styles.featureTitle}>Puntos Ilimitados</h3>
-            <p style={styles.featureDescription}>
-              Sistema flexible: 1 punto = $100 gastado, sin límites
-            </p>
-          </div>
-
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>💰</div>
-            <h3 style={styles.featureTitle}>Para Todos</h3>
-            <p style={styles.featureDescription}>
-              Desde tiendas pequeñas hasta cadenas. Planes adaptados a tu tamaño
-            </p>
-          </div>
-
-          <div style={styles.featureCard}>
-            <div style={styles.featureIcon}>⚡</div>
-            <h3 style={styles.featureTitle}>Setup en Minutos</h3>
-            <p style={styles.featureDescription}>
-              Integración simple, sin código. Empieza hoy mismo
-            </p>
-          </div>
+      {/* STATS */}
+      <section className="stats">
+        <div className="container stats__grid">
+          <div className="stat"><b>342</b><span>comercios activos</span></div>
+          <div className="stat"><b>8.400+</b><span>personas usando Vuelve</span></div>
+          <div className="stat"><b>$12,9M</b><span>canjeados el último mes</span></div>
+          <div className="stat"><b>4,6/5</b><span>satisfacción promedio</span></div>
         </div>
       </section>
 
-      {/* Plans */}
-      <section id="planes" style={{ ...styles.section, background: '#f7f7f7' }}>
-        <h2 style={styles.sectionTitle}>Planes para Tiendas</h2>
-        <div style={styles.plansGrid}>
-          <div style={styles.planCard}>
-            <h3 style={styles.planName}>Gratis</h3>
-            <div style={styles.planPrice}>$0</div>
-            <div style={styles.planPeriod}>/mes</div>
-            <ul style={styles.planFeatures}>
-              <li style={styles.planFeature}>✓ 2 ofertas activas</li>
-              <li style={styles.planFeature}>✓ 100 clientes máximo</li>
-              <li style={styles.planFeature}>✓ Dashboard básico</li>
-              <li style={styles.planFeature}>✗ Recordatorios IA</li>
-            </ul>
-            <button style={styles.planButton}>Empezar Gratis</button>
+      {/* NEGOCIOS */}
+      <section id="negocios" className="section section--green">
+        <div className="container">
+          <div className="section__head">
+            <span className="eyebrow eyebrow--green">Negocios</span>
+            <h2>Recupera clientes antes de que se vayan a otro lado</h2>
+            <p>
+              Perder clientes es normal — no hacer nada al respecto, no debería serlo.
+              Vuelve te avisa quién se está por ir y te da la herramienta para traerlo de vuelta.
+            </p>
           </div>
 
-          <div style={{ ...styles.planCard, ...styles.planCardHighlight }}>
-            <h3 style={styles.planName}>Pro ⭐</h3>
-            <div style={styles.planPrice}>$29.990</div>
-            <div style={styles.planPeriod}>/mes</div>
-            <ul style={styles.planFeatures}>
-              <li style={styles.planFeature}>✓ Ofertas ilimitadas</li>
-              <li style={styles.planFeature}>✓ Clientes ilimitados</li>
-              <li style={styles.planFeature}>✓ Recordatorios IA</li>
-              <li style={styles.planFeature}>✓ Análisis avanzado</li>
-            </ul>
-            <button style={styles.planButton}>Comenzar Pro</button>
+          <div className="features">
+            {negociosFeatures.map((f) => (
+              <div className="feature-card" key={f.title}>
+                <div className="feature-card__icon feature-card__icon--green">{f.icon}</div>
+                <h3>{f.title}</h3>
+                <p>{f.text}</p>
+              </div>
+            ))}
           </div>
 
-          <div style={styles.planCard}>
-            <h3 style={styles.planName}>Plus (Usuario)</h3>
-            <div style={styles.planPrice}>$4.990</div>
-            <div style={styles.planPeriod}>/mes</div>
-            <ul style={styles.planFeatures}>
-              <li style={styles.planFeature}>✓ Puntos 2x</li>
-              <li style={styles.planFeature}>✓ Canjes ilimitados</li>
-              <li style={styles.planFeature}>✓ Desafíos semanales</li>
-              <li style={styles.planFeature}>✓ Referral program</li>
-            </ul>
-            <button style={styles.planButton}>Suscribirse</button>
+          <div className="steps">
+            <div className="step">
+              <div className="step__num">01</div>
+              <h4>Crea tu cuenta gratis</h4>
+              <p>Sin tarjeta de crédito, sin contrato. Listo en 5 minutos.</p>
+            </div>
+            <div className="step">
+              <div className="step__num">02</div>
+              <h4>Sube tu primera oferta</h4>
+              <p>Un 2x1, un descuento, lo que quieras. Se publica al instante.</p>
+            </div>
+            <div className="step">
+              <div className="step__num">03</div>
+              <h4>Valida compras con QR</h4>
+              <p>Tus clientes ganan puntos y tú ves crecer la recurrencia.</p>
+            </div>
           </div>
 
-          <div style={{ ...styles.planCard, ...styles.planCardHighlight }}>
-            <h3 style={styles.planName}>Premium 🚀</h3>
-            <div style={styles.planPrice}>$59.990</div>
-            <div style={styles.planPeriod}>/mes</div>
-            <ul style={styles.planFeatures}>
-              <li style={styles.planFeature}>✓ Todo lo de Pro +</li>
-              <li style={styles.planFeature}>✓ A/B Testing</li>
-              <li style={styles.planFeature}>✓ POS Integración</li>
-              <li style={styles.planFeature}>✓ Banner Destacado</li>
-            </ul>
-            <button style={styles.planButton}>Comenzar Premium</button>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section id="stats" style={styles.stats}>
-        <div style={styles.statsGrid}>
-          <div>
-            <div style={styles.statValue}>342</div>
-            <div style={styles.statLabel}>Tiendas Activas</div>
-          </div>
-          <div>
-            <div style={styles.statValue}>8K+</div>
-            <div style={styles.statLabel}>Usuarios</div>
-          </div>
-          <div>
-            <div style={styles.statValue}>$12.9M</div>
-            <div style={styles.statLabel}>Volumen Mes 12</div>
-          </div>
-          <div>
-            <div style={styles.statValue}>98%</div>
-            <div style={styles.statLabel}>Satisfacción</div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section id="contact" style={styles.ctaSection}>
-        <h2 style={styles.ctaSectionTitle}>¿Listo para Crecer?</h2>
-        <p style={styles.ctaSectionSubtitle}>
-          Únete a 342 tiendas que ya usan Vuelve
-        </p>
-        <form onSubmit={handleEmailSubmit} style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center' }}>
-          <input
-            type="email"
-            placeholder="tu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              padding: '10px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              fontSize: '14px',
-              width: '300px',
-            }}
-          />
-          <button type="submit" style={styles.ctaSectionButton}>
-            Comenzar Ahora
+          <button className="btn btn--green" onClick={() => scrollToSection('precios')}>
+            Prueba gratis 30 días
           </button>
-        </form>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer style={styles.footer}>
-        <p>© 2025 Vuelve. Todos los derechos reservados. | Hecho en Chile 🇨🇱</p>
+      {/* PERSONAS */}
+      <section id="personas" className="section section--mango">
+        <div className="container">
+          <div className="section__head">
+            <span className="eyebrow eyebrow--mango">Personas</span>
+            <h2>Cada compra en tu barrio, suma</h2>
+            <p>
+              El café de la esquina, el almacén, la peluquería de siempre — probablemente
+              ya son tiendas Vuelve. Solo falta que empieces a acumular.
+            </p>
+          </div>
+
+          <div className="features">
+            {personasFeatures.map((f) => (
+              <div className="feature-card" key={f.title}>
+                <div className="feature-card__icon feature-card__icon--mango">{f.icon}</div>
+                <h3>{f.title}</h3>
+                <p>{f.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="steps">
+            <div className="step">
+              <div className="step__num">01</div>
+              <h4>Descarga y regístrate</h4>
+              <p>Con tu correo. Sin costo, sin compromiso.</p>
+            </div>
+            <div className="step">
+              <div className="step__num">02</div>
+              <h4>Genera tu QR al pagar</h4>
+              <p>La tienda lo valida y tus puntos suben al tiro.</p>
+            </div>
+            <div className="step">
+              <div className="step__num">03</div>
+              <h4>Canjea cuando quieras</h4>
+              <p>Descuentos, productos gratis, beneficios de nivel Gold.</p>
+            </div>
+          </div>
+
+          <button className="btn btn--mango" onClick={() => scrollToSection('precios')}>
+            Empieza a ganar puntos
+          </button>
+        </div>
+      </section>
+
+      {/* RUBROS */}
+      <section id="rubros" className="section">
+        <div className="container">
+          <div className="section__head">
+            <h2>Donde ya compras seguido, Vuelve funciona</h2>
+            <p>No es solo gastronomía. Es cualquier negocio de barrio que quieras ver de nuevo.</p>
+          </div>
+          <div className="chips">
+            {rubros.map((r) => <span className="chip" key={r}>{r}</span>)}
+          </div>
+        </div>
+      </section>
+
+      {/* PRECIOS */}
+      <section id="precios" className="section" style={{ background: 'var(--paper-alt)' }}>
+        <div className="container">
+          <div className="section__head" style={{ maxWidth: 640 }}>
+            <span className="eyebrow eyebrow--violet">Precios</span>
+            <h2>Precios claros, para cada lado de Vuelve</h2>
+            <p>Sin letra chica. Cambia o cancela tu plan cuando quieras.</p>
+          </div>
+
+          {/* Precios negocios */}
+          <div className="pricing-block">
+            <span className="eyebrow eyebrow--green">Para tu negocio</span>
+            <div className="pricing-grid pricing-grid--3">
+              <div className="price-card">
+                <h3>Gratis</h3>
+                <div className="price">$0</div>
+                <ul>
+                  <li>2 ofertas activas</li>
+                  <li>100 clientes máximo</li>
+                  <li>Panel básico</li>
+                  <li className="no">Recordatorios con IA</li>
+                </ul>
+                <button className="btn btn--outline-green">Crear cuenta</button>
+              </div>
+
+              <div className="price-card price-card--featured-green">
+                <span className="price-card__badge price-card__badge--green">Más elegido</span>
+                <h3>Pro</h3>
+                <div className="price">$29.990<span> /mes</span></div>
+                <ul>
+                  <li>Ofertas y clientes ilimitados</li>
+                  <li>Panel avanzado</li>
+                  <li><b>Recordatorios con IA</b></li>
+                  <li>Analítica de clientes</li>
+                </ul>
+                <button className="btn btn--green">Comenzar Pro</button>
+              </div>
+
+              <div className="price-card">
+                <h3>Premium</h3>
+                <div className="price">$59.990<span> /mes</span></div>
+                <ul>
+                  <li>Todo lo de Pro</li>
+                  <li>A/B testing de ofertas</li>
+                  <li>Integración POS</li>
+                  <li>Banner destacado en la app</li>
+                </ul>
+                <button className="btn btn--outline-green">Comenzar Premium</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Precios personas */}
+          <div className="pricing-block">
+            <span className="eyebrow eyebrow--mango">Para ti</span>
+            <div className="pricing-grid pricing-grid--2">
+              <div className="price-card">
+                <h3>Gratis</h3>
+                <div className="price">$0</div>
+                <ul>
+                  <li>1 punto por cada $100</li>
+                  <li>3 canjes al mes</li>
+                  <li>Niveles Bronze y Silver</li>
+                  <li className="no">Puntos 2x</li>
+                </ul>
+                <button className="btn btn--outline-mango">Crear cuenta</button>
+              </div>
+
+              <div className="price-card price-card--featured-mango">
+                <span className="price-card__badge price-card__badge--mango">Recomendado</span>
+                <h3>Plus</h3>
+                <div className="price">$4.990<span> /mes</span></div>
+                <ul>
+                  <li><b>Puntos 2x</b> en cada compra</li>
+                  <li>Canjes ilimitados</li>
+                  <li>Nivel Gold + desafíos semanales</li>
+                  <li>Gana invitando amigos</li>
+                </ul>
+                <button className="btn btn--mango">Suscribirme</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className="final">
+        <div className="container">
+          <div className="final__head">
+            <h2>¿Listo para volver a crecer?</h2>
+            <p>342 tiendas y 8.400 personas ya están usando Vuelve en Santiago.</p>
+          </div>
+
+          <div className="final__panels">
+            <div className="panel panel--green">
+              <h3>¿Tienes un local?</h3>
+              <p>Crea tu cuenta gratis y sube tu primera oferta hoy mismo.</p>
+              <button className="btn btn--green" onClick={() => scrollToSection('precios')}>Comenzar gratis</button>
+            </div>
+            <div className="panel panel--mango">
+              <h3>¿Compras seguido?</h3>
+              <p>Regístrate y empieza a acumular puntos en tus tiendas favoritas.</p>
+              <button className="btn btn--mango" onClick={() => scrollToSection('precios')}>Únete gratis</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="container">
+          <div className="footer__grid">
+            <div>
+              <a href="#top" className="brand" style={{ color: 'white' }}>
+                <LogoMark />
+                Vuelve
+              </a>
+              <p className="footer__tagline">
+                Fidelización para el comercio independiente en Chile. Hecho en Santiago.
+              </p>
+            </div>
+            <div className="footer__col">
+              <h5>Producto</h5>
+              <a href="#negocios" onClick={(e) => { e.preventDefault(); scrollToSection('negocios'); }}>Cómo funciona</a>
+              <a href="#precios" onClick={(e) => { e.preventDefault(); scrollToSection('precios'); }}>Precios</a>
+              <a href="#rubros" onClick={(e) => { e.preventDefault(); scrollToSection('rubros'); }}>Rubros</a>
+            </div>
+            <div className="footer__col">
+              <h5>Negocios</h5>
+              <a href="#negocios" onClick={(e) => { e.preventDefault(); scrollToSection('negocios'); }}>Panel de control</a>
+              <a href="#negocios" onClick={(e) => { e.preventDefault(); scrollToSection('negocios'); }}>Recordatorios IA</a>
+              <a href="#precios" onClick={(e) => { e.preventDefault(); scrollToSection('precios'); }}>Precios negocios</a>
+            </div>
+            <div className="footer__col">
+              <h5>Personas</h5>
+              <a href="#personas" onClick={(e) => { e.preventDefault(); scrollToSection('personas'); }}>Cómo ganar puntos</a>
+              <a href="#personas" onClick={(e) => { e.preventDefault(); scrollToSection('personas'); }}>Niveles</a>
+              <a href="#precios" onClick={(e) => { e.preventDefault(); scrollToSection('precios'); }}>Precios personas</a>
+            </div>
+          </div>
+          <div className="footer__bottom">
+            <span>© 2025 Vuelve. Todos los derechos reservados.</span>
+            <form onSubmit={handleEmailSubmit} style={{ display: 'flex', gap: 8 }}>
+              <input
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 8,
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  background: 'rgba(255,255,255,0.06)',
+                  color: 'white',
+                  fontSize: 13,
+                  width: 200,
+                }}
+              />
+              <button type="submit" className="btn btn--violet btn--sm">
+                {sent ? 'Enviado ✓' : 'Avísame'}
+              </button>
+            </form>
+          </div>
+        </div>
       </footer>
     </div>
   );
